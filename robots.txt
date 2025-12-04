@@ -1,4 +1,6 @@
+# Allow access to all standard bots
 User-agent: *
 Allow: /
 
+# Link to your sitemap file
 Sitemap: https://anjou-sll.github.io/TapNhacCuaToi/sitemap.xml
