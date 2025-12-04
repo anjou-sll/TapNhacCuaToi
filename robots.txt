@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anjou-sll.github.io/TapNhacCuaToi/sitemap.xml
