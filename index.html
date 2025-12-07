@@ -26,7 +26,7 @@
 	  "@type": "MusicPlaylist",
 	  "name": "Tuyển tập: 70 Năm Tình Ca Việt Nam và Nhạc AI Cover",
 	  "description": "Một bộ sưu tập cá nhân các bản nhạc Việt Nam, bao gồm chương trình kinh điển '70 Năm Tình Ca Việt Nam' từ SBS và các bản cover AI hiện đại.",
-	  "numTracks": 162, 
+	  "numTracks": 170, 
 	  "publisher": {
 		"@type": "Person",
 		"name": "anjou-sll"
@@ -301,7 +301,31 @@
 	.playback-control-btn:hover {
 		background-color: #e9f5ff;
 		border-color: #007bff;
-}    
+	}    
+	
+	/* Scroll to Top Button Styles */
+	#btn-scroll-top {
+		display: none; /* Initially hidden */
+		position: fixed; /* Fixed position relative to the viewport */
+		bottom: 120px; /* Position it above the fixed audio player (which is at bottom: 0) */
+		right: 10px;
+		z-index: 1000; /* Ensure it is above other content */
+		
+		padding: 10px 15px;
+		font-size: 20px;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		border-radius: 50%; /* Make it round */
+		cursor: pointer;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: opacity 0.3s, background-color 0.2s;
+	}
+
+	#btn-scroll-top:hover {
+		background-color: #0056b3;
+	}
+
     /* ========================================================================= */
     /* 📱 MOBILE OPTIMIZATIONS (Max-Width 400px) 📱 */
     /* ========================================================================= */
@@ -1240,7 +1264,7 @@
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=TyDcqdQbEAQ" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/TyDcqdQbEAQ/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li> 				
-<!--
+
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TinhDauTinhCuoi-TranThienThanh-Slowrock%40music.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">TÌNH ĐẦU TÌNH CUỐI</span>
@@ -1249,7 +1273,7 @@
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=frzgSrMkIKI" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/frzgSrMkIKI/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li> 
--->	
+	
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TinhBoVo-LamPhuong-HoaiNiemXuaAI.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">TÌNH BƠ VƠ</span>
@@ -1344,21 +1368,23 @@
 				<span class="yt-text">Xem Video</span> </button> </li>  	
 	</div>					
     </ul>
+
+	<button id="btn-scroll-top" title="Lên đầu trang">⬆️</button>
 	
 	<!-- Default Statcounter code for TapNhacCuaToi
 	https://anjou-sll.github.io/TapNhacCuaToi/ -->
 	<script type="text/javascript">
-	var sc_project=13187189; 
-	var sc_invisible=1; 
-	var sc_security="527b4294"; 
+		var sc_project=13187189; 
+		var sc_invisible=1; 
+		var sc_security="527b4294"; 
 	</script>
 	<script type="text/javascript"
 	src="https://www.statcounter.com/counter/counter.js" async></script>
 	<noscript><div class="statcounter"><a title="Web Analytics Made Easy -
-	Statcounter" href="https://statcounter.com/" target="_blank"><img
-	class="statcounter" src="https://c.statcounter.com/13187189/0/527b4294/1/"
-	alt="Web Analytics Made Easy - Statcounter"
-	referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+		Statcounter" href="https://statcounter.com/" target="_blank"><img
+		class="statcounter" src="https://c.statcounter.com/13187189/0/527b4294/1/"
+		alt="Web Analytics Made Easy - Statcounter"
+		referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 	<!-- End of Statcounter Code -->
 
     <script>
@@ -1373,6 +1399,7 @@
         const folderLink = document.getElementById('folder-link');
 		const playAllSwitch = document.getElementById('play-all-switch');
 		const shuffleSwitch = document.getElementById('shuffle-switch');
+		const scrollTopButton = document.getElementById('btn-scroll-top');
         const folderDescriptions = {
             '70NamTinhCaVN/': {
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/HoaiNam.png?q=80&w=100&h=100&fit=contain&auto=format', 
@@ -1396,6 +1423,20 @@
                 linkText: ''
             }
         };
+
+	function toggleScrollTopButton() {
+		// Determine the scroll threshold (e.g., 500 pixels down)
+		// window.scrollY is the current vertical scroll position
+		const scrollThreshold = 500; 
+
+		if (window.scrollY > scrollThreshold) {
+			// Show the button
+			scrollTopButton.style.display = 'block';
+		} else {
+			// Hide the button
+			scrollTopButton.style.display = 'none';
+		}
+	}
 		
 		function setupExternalLinkListeners() {
 			// 1. Setup listeners for the YouTube Buttons (Folder B)
@@ -1642,7 +1683,21 @@
 				playNextTrack();
 			}
 		});
-		
+
+		// --- Scroll to Top Logic ---
+
+		// 1. Monitor the window scroll event to show/hide the button
+		window.addEventListener('scroll', toggleScrollTopButton);
+
+		// 2. Handle the button click event
+		scrollTopButton.addEventListener('click', () => {
+			// Scroll the document body back to the top
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth' // Adds a smooth scrolling animation
+			});
+		});		
+
 		// --- Playback Control Listeners ---
 		document.getElementById('btn-next-track').addEventListener('click', playNextTrack);
 		document.getElementById('btn-previous-track').addEventListener('click', playPreviousTrack);	
