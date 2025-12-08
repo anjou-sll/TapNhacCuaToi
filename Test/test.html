@@ -1,1 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+	<meta property="og:title" content="70 Năm Tình Ca Việt Nam & Nhạc AI Cover - Tập Nhạc Của Tôi" />
+	<meta property="og:description" content="Tuyển tập nhạc Việt đặc biệt: Các bản thu thanh 70 Năm Tình Ca Việt Nam (từ SBS) và các bản cover AI mới lạ. Nghe nhạc chất lượng cao không quảng cáo." />
+	<meta property="og:type" content="music.playlist" />
+	<meta property="og:url" content="https://anjou-sll.github.io/TapNhacCuaToi/" /> 
+	<meta property="og:image" content="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/favicon.png" />
+	<meta property="og:image:width" content="100" />
+	<meta property="og:image:height" content="100" />
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="70 Năm Tình Ca Việt Nam & Nhạc AI Cover" />
+	
+	<link rel="icon" type="image/png" href="favicon.png">
+	
+
+	<title>70 Năm Tình Ca Việt Nam & Nhạc AI Cover - Tập Nhạc Của Tôi</title>
+	
+	<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "MusicPlaylist",
+	  "name": "Tuyển tập: 70 Năm Tình Ca Việt Nam và Nhạc AI Cover",
+	  "description": "Một bộ sưu tập cá nhân các bản nhạc Việt Nam, bao gồm chương trình kinh điển '70 Năm Tình Ca Việt Nam' từ SBS và các bản cover AI hiện đại.",
+	  "numTracks": 170, 
+	  "publisher": {
+		"@type": "Person",
+		"name": "anjou-sll"
+	  },
+	  "track": [
+		{
+		  "@type": "MusicRecording",
+		  "name": "01. Nguyễn Văn Tuyên - Dzoãn Mẫn - Đặng Thế Phong (70 Năm Tình Ca)",
+		  "url": "https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/01.NgVanTuyen-DzoanMan-DangThePhong-70namtinhcaVN.mp3"
+		},
+		{
+		  "@type": "MusicRecording",
+		  "name": "ÁNH TRĂNG NÓI HỘ LÒNG TÔI (Nhạc AI Cover)",
+		  "url": "https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ANHTRANGNOIHOLONGTOI-NhacHoa_lvDinhCongMinh_TrucPhuong-GocAcoustic.mp3"
+		}
+	  ]
+	}
+	</script>	
+<style>
+    /* BASE STYLES */
+    body { 
+        font-family: sans-serif; 
+        max-width: 800px; 
+        margin: 0 auto; 
+		padding: 5px 5px 110px 5px;
+        background-color: #f4f4f9;
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 10px; font-family:  "bradley hand", cursive; font-style: italic; }
+    #audio-player { display: flex; width: 100%; margin-bottom: 10px; background-color: #aaa; border-radius: 3px; margin: 0 auto; 
+		visibility: visible; }
+		
+    #current-track { margin-bottom: 15px; font-style: italic; color: #555; text-align: center; padding: 5px 0; }
+
+	/*  🔴--- FIXED FOOTER STYLES🔴 --- */
+
+	#fixed-player-wrapper {
+		position: fixed;
+		bottom: 0;
+		left: 5px;
+		right: 5px;
+		z-index: 1000;
+		max-width: 800px; /* IMPORTANT: Matches body max-width for centering */
+		margin: 0 auto; /* Centers the fixed bar horizontally */
+		
+		background-color: #aaa;
+		border-top: 1px solid #ccc;
+		box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+		padding: 5px ; /* 0  10px 0;*/
+		
+		display: flex; 
+		flex-direction: column; /* Stacks player and control bar */
+		align-items: center; 
+	}
+
+	/* Style for the bar containing Prev/Next and Text */
+	#playback-controls-bar {
+		display: flex;
+		justify-content: space-between; 
+		align-items: center;
+		width: 100%;
+		margin: 0;
+	}
+
+	/* Style the area for the text and switches (the middle column) */
+	#track-info-area {
+		flex-grow: 1; 
+		min-width: 0;
+		display: flex; 
+		flex-direction: column; 
+		align-items: center;
+		padding: 0 10px; 
+	}
+
+	/* Style for the "Now Playing" text */
+	#current-track {
+		text-align: center;
+		font-style: italic; 
+		color: #555; 
+		font-size: 14px;
+		margin-bottom: 5px;
+		width: 100%;
+	}
+
+	/* Style the switches area */
+	#playback-switches {
+		text-align: center;
+	}    
+
+    /* FOLDER DESCRIPTION & CONTROLS  */
+
+	#folder-description {
+		padding: 20px; 
+		margin-bottom: 20px;
+		background-color: #fff; 
+		border-radius: 8px; 
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		overflow: auto; 
+	}
+
+	#folder-image-holder { 
+		float: left;
+		margin-right: 15px; /* Add space between image and text */
+		/* flex-shrink: 0; */
+		width: 80px; 
+		height: 100px; 
+		overflow:hidden  ; 
+		border-radius: 4px; 
+	}
+    #folder-image {  width: 100%; height: 100%; object-fit: contain; display: block; }
+	
+	#folder-text-container { 
+		position: relative; 
+		padding-bottom: 20px; 
+		min-width: 0; 
+	}    
+	#folder-text { font-size: 16px; color: #444; line-height: 1.5; margin-bottom: 10px; }
+    #folder-link { position: absolute; bottom: 0; right: 0; font-size: 14px; text-decoration: none; color: #007bff; font-weight: bold; }
+    #folder-link:hover { text-decoration: underline; }
+
+    #folder-controls { margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .folder-button {
+        flex-grow: 1; min-width: 120px; padding: 10px 15px; border: 1px solid #007bff;
+        border-radius: 5px; background-color: #fff; color: #007bff; cursor: pointer;
+        font-size: 14px; transition: background-color 0.2s, color 0.2s;
+    }
+    .folder-button.active, .folder-button:hover { background-color: #007bff; color: white; border-color: #0056b3; }
+	
+	.truncate {
+		/* Limit the height to approximately two lines of text (16px font-size * 1.5 line-height * 2 lines) */
+		max-height: 3.2em ;  
+		overflow: hidden;
+		position: relative; /* Needed for absolute positioning of potential fade effect (if added later) */
+		transition: max-height 0.3s ease-out;
+	}
+	/* 🆕 NEW: Fade Effect for Truncated Text */
+	.truncate::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 2em; /* Height of the fade (approximately one line) */
+		/* Fades from transparent at the top (0%) to white/background color at the bottom (100%) */
+		background: linear-gradient(to top, #fff, rgba(255, 255, 255, 0)); 
+		pointer-events: none; /* Allows clicks to pass through to the text/link below if present */
+	}
+	
+	/* Style for when the text is fully expanded */
+	.expanded {
+		max-height: 780px !important; /* Large height to show all content */
+		overflow: visible !important;
+	}	
+	/* 🆕 NEW: Remove fade effect when expanded */
+	.expanded::after {
+		content: none !important; /* Removes the pseudo-element when the description is fully visible */
+	}
+
+    /* PLAYLIST STYLES (Universal) */
+    #playlist { list-style: none; padding: 0; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fff; }
+    
+    #playlist li { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 7px 10px; border-bottom: 1px solid #eee; cursor: pointer; 
+        transition: background-color 0.2s; font-size: 16px; 
+    }
+    
+    /* Folder A Info & Default Track Info (Unchanged) */
+    .track-info { flex-grow: 1; padding: 2px 0; pointer-events: none; }
+
+	/* --- Universal Folder B Cell Styling --- */
+
+	/* Folder B Info Container - ALWAYS stack vertically */
+	.folder-b-info {
+		display: block;
+		pointer-events: none;
+		flex-grow: 1;
+	}
+	/* Ensure links inside folder-b-info are clickable */
+	.folder-b-info a {
+		pointer-events: auto;
+		text-decoration: none;
+		color: #007bff;
+		font-weight: bold;
+	}
+
+	/* Folder B Cell Styling - Ensure cells are on their own line universally */
+	.info-cell {
+		display: block;
+		/* padding: 2px 0;   Minimal top/bottom padding for standard size */
+		flex-basis: auto;
+		overflow: visible; /* hidden; */
+		white-space: normal ; /*nowrap;  Ensures cell text stays on one line on desktop */
+		text-overflow: normal; /*;ellipsis; */
+		text-align: left;
+	}
+	/* Increase font size for title on desktop */
+	.folder-b-info .cell-top {
+		font-size: 17px;
+		font-weight: bold;
+		/*font-family: "Lucida Handwriting", cursive, sans-serif; */
+	}
+	.folder-b-info .cell-middle {
+		font-size: 16px;
+		font-style: italic;
+		padding: 2px 0px;
+		font-family:  "bradley hand", cursive; /*"Lucida Handwriting", cursive, sans-serif;*/
+	}
+	.folder-b-info .cell-bottom {
+		font-size: 16px;
+		color: #555;
+		text-align: right;
+		padding-top:5px;
+		padding-right: 10px;
+		/* font-family: "Lucida Handwriting", cursive, sans-serif;*/
+	}
+ 
+	/* --- Filter Section Styles --- */
+	#filter-section {
+		padding: 15px;
+		background-color: #ccc;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
+
+	#filter-section h3 {
+		margin-top: 0;
+		margin-bottom: 10px;
+		color: #333;
+	}
+
+	#filter-controls {
+		display: flex;
+		flex-wrap: wrap; /* Allows wrapping on mobile */
+		align-items: center;
+		gap: 10px; /* Reduced gap for smaller screens */
+	}
+
+	#filter-controls label {
+		font-weight: bold;
+		color: #555;
+	}
+
+	#filter-controls select {
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		font-size: 14px;
+	}
+
+	/* Mobile Adjustments (within @media (max-width: 400px)) */
+	@media (max-width: 400px) {
+		#filter-controls {
+			flex-direction: column; /* Stack controls vertically */
+			align-items: flex-start;
+			gap: 5px;
+		}
+		#filter-controls select {
+			width: 100%; /* Make dropdowns full width on mobile */
+		}
+	}
+ 
+    /* End of Playback/List Styling */
+    #playlist li:last-child { border-bottom: none; }
+    .playing { font-weight: bold; color: #007bff; background-color: #e9f5ff; }
+    .hidden-track { display: none !important; }
+
+    /* YouTube Button Styles (General/Desktop) */
+    .youtube-link { 
+        flex-shrink: 0; background: none; border: 1px solid #ccc; border-radius: 4px; 
+        /* UPDATED: Reduced vertical padding for tighter fit */
+        padding: 3px 3px; 
+        cursor: pointer; 
+        display: flex; 
+        flex-direction: column; /* Universal vertical stack */
+        align-items: center; 
+        pointer-events: auto; 
+        text-align: center;
+    }
+    .youtube-link:hover { background-color: #ffe8e8; border-color: #ff0000; }
+    .youtube-link img { 
+        /* UPDATED: Maximize thumbnail size */
+        width: 65px; 
+        height: 45px; 
+        object-fit: cover; border-radius: 2px; 
+        /* UPDATED: Reduced margin below image */
+        margin: 0 auto 1px auto; 
+    }
+    .yt-text { 
+        font-size: 14px; 
+        display: block;
+    } 
+
+    /* External Link Styles (Folder A) */
+    .external-link {
+        flex-shrink: 0; font-size: 14px; color: #007bff; text-decoration: none;
+        padding: 5px 10px; border: 0 solid #007bff; border-radius: 4px;
+        transition: background-color 0.2s; pointer-events: auto; margin-left: 10px;
+    }
+    .external-link:hover { background-color: #007bff; color: white; }
+
+	/* Playback Control Button Styles */
+	.playback-control-btn {
+		padding: 8px 15px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		background-color: #fff;
+		color: #333;
+		cursor: pointer;
+		font-size: 14px;
+		font-weight: bold;
+		margin: 0 5px;
+		transition: background-color 0.2s;
+	}
+
+	.playback-control-btn:hover {
+		background-color: #e9f5ff;
+		border-color: #007bff;
+	}    
+	
+	/* Scroll to Top Button Styles */
+	#btn-scroll-top {
+		display: none; /* Initially hidden */
+		position: fixed; /* Fixed position relative to the viewport */
+		bottom: 120px; /* Position it above the fixed audio player (which is at bottom: 0) */
+		right: 10px;
+		z-index: 1000; /* Ensure it is above other content */
+		
+		padding: 10px 15px;
+		font-size: 20px;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		border-radius: 50%; /* Make it round */
+		cursor: pointer;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: opacity 0.3s, background-color 0.2s;
+	}
+
+	#btn-scroll-top:hover {
+		background-color: #0056b3;
+	}
+
+    /* ========================================================================= */
+    /* 📱 MOBILE OPTIMIZATIONS (Max-Width 400px) 📱 */
+    /* ========================================================================= */
+
+    @media (max-width: 400px) { 
+        /* Base and Control Stacking (Unchanged) */
+        .folder-button { flex-basis: 100% !important; }
+		
+		/* Ensure the image itself doesn't stretch too much on mobile */
+		#folder-image {
+			object-fit: contain; /* Ensure image fits */
+		}	
+        #folder-link {
+            position: static !important; 
+            display: block !important;
+            text-align: right !important; 
+            margin-top: 5px !important;
+        }
+        #folder-text-container { padding-bottom: 5px !important; }
+        
+        /* --- PLAYLIST ITEM LOGIC --- */
+
+		/* Folder B Tracks - 2. Consistent Vertical Alignment */
+		    #playlist li:has(.folder-b-info) {
+		         flex-direction: row !important; 
+		         align-items: center !important; /* Forces vertical centering of all content */
+		         padding: 6px 10px !important; 
+		    }
+
+		    /* Folder B Info - ONLY resize the font, stacking is handled by general CSS */
+		    .folder-b-info {
+		        flex-grow: 1 !important; 
+		        width: 100% !important; 
+		        padding: 0 !important;
+		        margin-right: 10px !important; 
+		    }
+		    
+		    /* Folder B Cell Styling (Mobile) - Apply specific padding and font size changes */
+		    .info-cell {
+		        font-size: 13px !important;
+		        white-space: normal !important;
+		        text-overflow: clip !important;
+				padding: 1px 0 !important; /* Reset padding for precise control below */
+		    }
+			
+			/* 1. Top Cell is Bigger */
+		    .cell-top { 
+				font-weight: bold !important; 
+				text-align: left !important; 
+				font-family: "Lucida Handwriting","Segoe Script", cursive;
+				font-size: 15px !important; /* Bigger font */
+				padding-top: 2px !important; 
+				padding-bottom: 2px !important; /* Increases height */
+				color: #007bff !important;
+			}
+			
+			/* 1. & 2. Consistent Alignment for Middle/Bottom (Pushed Down) */
+		    .cell-middle { 
+				font-style: italic !important; 
+				text-align: left !important; 
+				font-size: 13px !important;
+				padding-bottom: 2px !important;
+			}
+			
+		    .cell-bottom { 
+		        font-size: 13px !important; 
+		        color: #555 !important; 
+		        text-align: right !important;
+				padding-top: 10px !important;
+				padding-right: 10px !important;
+				padding-bottom: 0 !important; /* Increases bottom spacing */
+		    }
+			.cell-bottom a {
+				color: #007bff !important;
+				font-weight: normal !important;
+			}
+        
+			/* YouTube Button structure remains tight */
+			    .youtube-link {
+			        height: 100% !important; 
+			        justify-content: center !important; 
+			        flex-shrink: 0 !important; 
+			        padding: 2px !important; 
+			        min-width: 50px !important;
+			        box-sizing: border-box !important; 
+			    }
+			    .youtube-link img {
+			        width: 65px !important; 
+			        height: 45px !important;
+			    }
+			    .youtube-link .yt-text {
+			        /*display: none !important;  HIDE text on mobile */
+           			font-size: 4px !important; /* Smaller text on mobile */
+            		white-space: nowrap !important; 
+			    }
+        /* 🔵 Folder A Tracks  */
+        #playlist li:not(:has(.folder-b-info)) {
+            flex-direction: column !important; 
+            align-items: flex-start !important;
+            padding: 8px 10px !important;
+        }
+        .track-info {
+            width: 100% !important; 
+            padding: 0 !important;
+        }
+        .external-link {
+            align-self: flex-end !important; 
+            margin-top: 5px !important;
+        }
+		
+    }
+</style>
+</head>
+<body>
+
+    <h1>Tập Nhạc Của Tôi</h1>
+    
+    <div id="folder-controls">
+        <button class="folder-button" data-prefix="70NamTinhCaVN/" id="btn-foldera">70 Năm Tình Ca Việt Nam</button>
+        <button class="folder-button" data-prefix="AI/" id="btn-folderb">Nhạc AI Cover</button>
+        <button class="folder-button" data-prefix="" id="btn-all">Show All</button>
+    </div>
+
+    <div id="folder-description">
+        <div id="folder-image-holder">
+            <img id="folder-image" src="" alt="Folder image" />
+        </div>
+        <div id="folder-text-container">
+            <p id="folder-text">Select a folder above to view its contents and a description of the music collection.</p>
+            <a href="#" id="folder-link" target="_blank" style="display: none;">Learn More</a>
+        </div>
+    </div>
+
+	<div id="filter-section" style="display:none; margin-bottom: 20px;">
+		<h3>Tùy Chọn</h3>
+		<div id="filter-controls" style="display: flex; gap: 20px; align-items: center;">
+		<!-- 	<img id="filter-icon" src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/slidersForFilters.png" 
+		 alt="Filter Icon" style="width: 25px; height: 25px;"/> -->
+			
+			<label for="composer-select">Composer:</label>
+			<select id="composer-select" style="flex-grow: 1;">
+				<option value="all">Tất Cả Composers</option>
+			</select>
+
+			<label for="creator-select">Creator:</label>
+			<select id="creator-select" style="flex-grow: 1;">
+				<option value="all">Tất Cả Creators</option>
+			</select>
+		</div>
+	</div>
+
+	<div id="fixed-player-wrapper">
+		<audio id="audio-player" controls></audio>
+		
+		<div id="playback-controls-bar">
+			<button id="btn-previous-track" class="playback-control-btn">⏮️</button>
+			
+			<div id="track-info-area">
+				<div id="current-track">Select a song to play.</div>
+				
+				<div id="playback-switches">
+					<label style="margin-right: 15px;">
+						<input type="checkbox" id="play-all-switch" checked> 
+						<span style="font-weight: bold;">Play All</span>
+					</label>
+					<label>
+						<input type="checkbox" id="shuffle-switch"> 
+						<span style="font-weight: bold;">Shuffle</span>
+					</label>
+				</div>
+			</div>
+			
+			<button id="btn-next-track" class="playback-control-btn">⏭️</button>
+		</div>
+	</div>
+    <ul id="playlist">
+	<! folder A tracks list >
+	<div> 	
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/01.NgVanTuyen-DzoanMan-DangThePhong-70namtinhcaVN.mp3">
+            <span class="track-info">01. Nguyễn Văn Tuyên - Dzoãn Mẫn - Đặng Thế Phong</span> 
+			<a href="https://t-van.net/70-nam-tinh-ca-1-l%e1%bb%9di-gi%e1%bb%9bi-thi%e1%bb%87u/" target="_blank" class="external-link">Đọc thêm ...</a></li>		
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/02.1940LeThuong-70namtinhcaVN.mp3">
+            <span class="track-info">02. 1940 Lê Thương</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-2-van-ph%e1%bb%a5ng/" target="_blank" class="external-link">Đọc thêm ...</a></li>	
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/03.VanCao-70namtinhcaVN.mp3">
+            <span class="track-info">03. Văn Cao</span> </li>	
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/04.VanCao2-70namtinhcaVN.mp3">
+            <span class="track-info">04. Văn Cao 2</span> 			 </li> 				
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/05.DuongThieuTuoc-70namtinhcaVN.mp3">
+            <span class="track-info">05. Dương Thiệu Tước</span> 			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/06.1945-1946-70namtinhcaVN.mp3">
+            <span class="track-info">06. 1945-1946 </span> 			 </li> 		
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/07.ThamOanh-CanhThan-ToVu-NguyenThienTo-70namtinhcaVN.mp3">
+            <span class="track-info">07. Thẩm Oánh - Canh Thân - Tô Vũ - Nguyễn Thiện Tơ</span> 			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/08.ThenaolanhacTienchien.mp3">
+            <span class="track-info">08. Thế Nào Là Nhạc Tiền Chiến</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/09.PhamDuyNhuong-LeHoangLong-TuMi-VoDucPhan-70namtinhcaVN.mp3">
+            <span class="track-info">09. Phạm Duy Nhượng - Lê Hoàng Long - Tu Mi - Võ Đức Phấn</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/10.LuuHuuPhuoc_TranHoan_ToHoai_ToVu-70namtinhcaVN.mp3">
+            <span class="track-info">10. Lưu Hữu Phước - Trần Hoàn - Tô Hoài - Tô Vũ</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/11.HoangGiac-NguyenVanKhanh-NguyenVanTi-70namtinhcaVN.mp3">
+            <span class="track-info">11. Hoàng Giác - Nguyễn Văn Khanh - Nguyễn Văn Tý</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/12.NguyenThienTo-NguyenVanQuy-HoangDuong-70namtinhcaVN.mp3">
+            <span class="track-info">12. Nguyễn Thiện Tơ - Nguyễn Văn Quỳ - Hoàng Dương</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/13.DoanChuan-TuLinh-70namtinhcaVN.mp3">
+            <span class="track-info">13. Đoàn Chuẩn - Từ Linh</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-13-doan-chu%e1%ba%a9n/" target="_blank" class="external-link">Đọc thêm ...</a></li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/14.PhamDuy-HoangTrong-NgocBich-70namtinhcaVN.mp3">
+            <span class="track-info">14. Phạm Duy - Hoàng Trọng - Ngọc Bích</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/15.VanGiang_ChauKy-70namtinhcaVN.mp3">
+            <span class="track-info">15. Văn Giang - Châu Kỳ</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/16.AnhViet-LamTuyen-70namtinhcaVN.mp3">
+            <span class="track-info">16. Anh Việt - Lâm Tuyền</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-16-anh-vi%e1%bb%87t-lam-tuy%e1%bb%81n/	" target="_blank" class="external-link">Đọc thêm ...</a></li>					
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/17.Tongketgiaidoan1938-1954-70namtinhcaVN.mp3">
+            <span class="track-info">17. Tổng Kết Giai Đoạn 1938-1954</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/18.HoangTrong-70namtinhcaVN.mp3">
+            <span class="track-info">18. Hoàng Trọng </span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/19.NgocBich-XuanTien-70namtinhcaVN.mp3">
+            <span class="track-info">19. Ngọc Bích - Xuân Tiên</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/20.VuThanh-DanTho-70namtinhcaVN.mp3">
+            <span class="track-info">10. Vũ Thành - Đan Thọ</span></li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/21.PhamDuy-70namtinhcaVN.mp3">
+            <span class="track-info">21. Phạm Duy</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-21-ph%e1%ba%a1m-duy/" target="_blank" class="external-link">Đọc thêm ...</a></li>						 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/22.LeTrongNguyen-70namtinhcaVN.mp3">
+            <span class="track-info">22. Lê Trọng Nguyễn</span>	 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/23.HoangNguyen-70namtinhcaVN.mp3">
+            <span class="track-info">23. Hoàng Nguyên</span> </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/24.LeMongNguyen-NguyenHien-NhatBang-70namtinhcaVN.mp3">
+            <span class="track-info">24. Lê Mộng Nguyen - Nguyễn Hiền - Nhật Bằng</span> </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/25.PhamDinhChuong-70namtinhcaVN.mp3">
+            <span class="track-info">25. Phạm Đình Chương</span>			 </li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/26.PhamDinhChuong2-70namtinhcaVN.mp3">
+            <span class="track-info">26. Phạm Đình Chương 2</span></li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/27.VanPhung-70namtinhcaVN.mp3">
+            <span class="track-info">27. Văn Phụng</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/28.HoangThiTho-70namtinhcaVN.mp3">
+            <span class="track-info">28. Hoàng Thi Thơ</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/29.NguyenVanDong-70namtinhcaVN.mp3">
+            <span class="track-info">29. Nguyễn Văn Đông</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/30.TuanKhanh-70namtinhcaVN.mp3">
+            <span class="track-info">30. Tuấn Khanh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/31.YVan-70namtinhcaVN.mp3">
+            <span class="track-info">31. Y Vân</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/32.AnhBang-70namtinhcaVN.mp3">
+            <span class="track-info">32. Anh Bằng</span></li>		
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/33.MinhKy-70namtinhcaVN.mp3">
+            <span class="track-info">33. Minh Kỳ</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/34.LeDinh-70namtinhcaVN.mp3">
+            <span class="track-info">34. Lê Dinh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/35.PhamManhCuong-PhamTrongCau-70namtinhcaVN.mp3">
+            <span class="track-info">35. Phạm Mạnh Cương - Phạm Trọng Cầu</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/36.LamPhuong-70namtinhcaVN.mp3">
+            <span class="track-info">36. Lam Phương</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/37.TrucPhuong-70namtinhcaVN.mp3">
+            <span class="track-info">37. Trúc Phương</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/38.HuynhAnh-70namtinhcaVN.mp3">
+            <span class="track-info">38. Huỳnh Anh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/39.KhanhBang-70namtinhcaVN.mp3">
+            <span class="track-info">39. Khánh Băng</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/40.DuyKhanh-70namtinhcaVN.mp3">
+            <span class="track-info">40. Duy Khánh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/41.ManhPhat-70namtinhcaVN.mp3">
+            <span class="track-info">41. Mạnh Phát</span></li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/42.NhatTruong-70namtinhcaVN.mp3">
+            <span class="track-info">42. Nhật Trường</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/43.HoaiLinh-70namtinhcaVN.mp3">
+            <span class="track-info">43. Hoài Linh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/44.SongNgoc-70namtinhcaVN.mp3">
+            <span class="track-info">44. Song Ngọc</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/45.NhatNgan-ThanhSon-70namtinhcaVN.mp3">
+            <span class="track-info">45. Nhật Ngân - Thanh Sơn</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/46.NguyenAnh9-70namtinhcaVN.mp3">
+            <span class="track-info">46. Nguyễn Ánh 9</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/47.DoLe-BaoThu-70namtinhcaVN.mp3">
+            <span class="track-info">47. Đỗ Lễ - Bảo Thu</span></li>		
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/48.HoaiAn-70namtinhcaVN.mp3">
+            <span class="track-info">48. Hoài An</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/49.TruongHai-DungChinh-HanChau-70namtinhcaVN.mp3">
+            <span class="track-info">49. Trường Hải - Dũng Chinh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/50.CungTien-70namtinhcaVN.mp3">
+            <span class="track-info">50. Cung Tiến</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/51.CungTien2-70namtinhcaVN.mp3">
+            <span class="track-info">51. Cung Tiến 2</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/52.ThanhTrang-AnhVietThu-70namtinhcaVN.mp3">
+            <span class="track-info">52. Thanh Trang - Anh Việt Thu</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/53.PhamTheMy-70namtinhcaVN.mp3">
+            <span class="track-info">53. Phạm Thế Mỹ</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/54.TramTuThieng1-70namtinhcaVN.mp3">
+            <span class="track-info">54. Trầm Tử Thiêng 1</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/55.TramTuThieng2-70namtinhcaVN.mp3">
+            <span class="track-info">55. Trầm Tử Thiêng 2</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/56.TruongSa-70namtinhcaVN.mp3">
+            <span class="track-info">56. Trường Sa</span></li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/57.TuCongPhung-70namtinhcaVN.mp3">
+            <span class="track-info">57. Từ Công Phụng</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/58.TrinhCongSon1-70namtinhcaVN.mp3">
+            <span class="track-info">58. Trịnh Công Sơn</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/59.TrinhCongSon2-70namtinhcaVN.mp3">
+            <span class="track-info">59. Trịnh Công Sơn 2</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/60.LeUyenPhuong1-70namtinhcaVN.mp3">
+            <span class="track-info">60. Lê Uyên Phương 1</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/61.LeUyenPhuong2-70namtinhcaVN.mp3">
+            <span class="track-info">61. Lê Uyên Phương 2</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/62.VuThanhAn-70namtinhcaVN.mp3">
+            <span class="track-info">62. Vũ Thành An</span></li>		
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/63.NgoThuyMien-70namtinhcaVN.mp3">
+            <span class="track-info">63. Ngô Thụy Miên</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/64.NgoThuyMien2-70namtinhcaVN.mp3">
+            <span class="track-info">64. Ngô Thụy Miên 2</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/65.NgTrCang-LeHHa-70namtinhcaVN.mp3">
+            <span class="track-info">65. Nguyễn Trung Cang - Lê Hựu Hà</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/66.NgTrCang-LeHHa-BanPhuongHoang-phan2.mp3">
+            <span class="track-info">66. Nguyễn Trung Cang - Lê Hựu Hà - Ban Phượng Hoàng</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/67.DucHuy-NamLoc-QuocDung.mp3">
+            <span class="track-info">67. Đức Huy - Nam Lộc - Quốc Dũng</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/68.PhamDuy1-70namtinhcaVN.mp3">
+            <span class="track-info">68. Phạm Duy 1</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/69.PhamDuy2-70namtinhcaVN.mp3">
+            <span class="track-info">69. Phạm Duy 2</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/70.PhamDuy3-70namtinhcaVN.mp3">
+            <span class="track-info">70. Phạm Duy 3</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/71.PhamDuy4-70namtinhcaVN.mp3">
+            <span class="track-info">71. Phạm Duy 4</span></li> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/72.Tongketthoikythunhi-70namtinhcaVN.mp3">
+            <span class="track-info">72. Tổng Kết Thời Kỳ Thứ Nhì</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/73.thoikisau75p1-70namtinhcaVN.mp3">
+            <span class="track-info">73. Thời Kỳ Sau 75 - Phần 1</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/74.thoikisau74p2-70namtinhcaVN.mp3">
+            <span class="track-info">74. Thời Kỳ Sau 75 - Phần 2</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/75.TramTuThieng-70namtinhcaVN.mp3">
+            <span class="track-info">75. Trầm Tử Thiêng</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-75-th%e1%bb%9di-k%e1%bb%b3-sau-1975-tr%e1%ba%a7m-t%e1%bb%ad-thieng/" target="_blank" class="external-link">Đọc thêm ...</a></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/76.HoangThiTho-PhamDuy-SongNgoc-AnhBang.mp3">
+            <span class="track-info">76. Hoàng Thi Thơ - Phạm Duy - Song Ngọc - Anh Bằng</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/77.TungGiang-DuyQuang-70namtinhcaVN.mp3">
+            <span class="track-info">77. Tùng Giang - Duy Quang</span></li>		
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/78.DucHuy-70namtinhcaVN.mp3">
+            <span class="track-info">78. Đức Huy</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/79.TranQuangNam-VuTuanDuc-70namtinhcaVN.mp3">
+            <span class="track-info">79. Trần Quảng Nam - Vũ Tuấn Đức</span>			
+			<a href="https://t-van.net/70-nam-tinh-ca-79-th%e1%bb%9di-k%e1%bb%b3-sau-1975-vu-tu%e1%ba%a5n-d%e1%bb%a9c-hoang-qu%e1%bb%91c-b%e1%ba%a3o/" target="_blank" class="external-link">Đọc thêm ...</a></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/80.NguyetAnh-VietDung-DuyTrac-70namtinhcaVN.mp3">
+            <span class="track-info">80. Nguyệt Ánh - Việt Dũng - Duy Trác</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/81.DangKhanh-70namtinhcaVN.mp3">
+            <span class="track-info">81. Đăng Khánh</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/82.TrucHo-70namtinhcaVN.mp3">
+            <span class="track-info">82. Trúc Hồ</span></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/83.LeTinHuong-TrinhNamSon-70namtinhcaVN.mp3">
+            <span class="track-info">83. Lê Tín Hương - Trịnh Nam Sơn</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/84.NgoThuyMien-70namtinhcaVN.mp3">
+            <span class="track-info">84. Ngô Thụy Miên</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-84-th%e1%bb%9di-k%e1%bb%b3-sau-1975-ngo-th%e1%bb%a5y-mien/" target="_blank" class="external-link">Đọc thêm ...</a></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/85.LamPhuong-70namtinhcaVN.mp3">
+            <span class="track-info">85. Lam Phương</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-85-th%e1%bb%9di-k%e1%bb%b3-sau-1975-lam-ph%c6%b0%c6%a1ng/" target="_blank" class="external-link">Đọc thêm ...</a></li>
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/86.AnhBang-TuCongPhung-70namtinhcaVN.mp3">
+            <span class="track-info">86. Anh Bằng - Từ Công Phụng</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-86-th%e1%bb%9di-k%e1%bb%b3-sau-1975-anh-b%e1%ba%b1ng-t%e1%bb%ab-cong-ph%e1%bb%a5ng/" target="_blank" class="external-link">Đọc thêm ...</a></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/87.NguyenDinhToan-70namtinhcaVN.mp3">
+            <span class="track-info">87. Nguyễn Đình Toàn</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-87-th%e1%bb%9di-k%e1%bb%b3-sau-1975-nguy%e1%bb%85n-dinh-toan/" target="_blank" class="external-link">Đọc thêm ...</a></li>						
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/88.NguyenAnh9-70namtinhcaVN.mp3">
+            <span class="track-info">88. Nguyễn Ánh 9</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/89.TranQuangLoc-70namtinhcaVN.mp3">
+            <span class="track-info">89. Trần Quang Lộc</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-89-th%e1%bb%9di-k%e1%bb%b3-sau-1975-tr%e1%ba%a7n-quang-l%e1%bb%99c/" target="_blank" class="external-link">Đọc thêm ...</a></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/90.NguyenTrungCan-LeHuuHa-QuocDung-70namtinhcaVN.mp3">
+            <span class="track-info">90. Nguyễn Trung Can - Lê Hựu Hà - Quốc Dũng</span>
+			<a href="https://t-van.net/70-nam-tinh-ca-90-th%e1%bb%9di-k%e1%bb%b3-sau-1975-nguy%e1%bb%85n-trung-cang-le-h%e1%bb%b1u-ha/" target="_blank" class="external-link">Đọc thêm ...</a></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/91.BaoChan-BaoPhuc-70namtinhcaVN.mp3">
+            <span class="track-info">91. Bảo Chấn - Bảo Phúc</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/92.ThanhTung-PhuQuang-QuocBao-70namtinhcaVN.mp3">
+            <span class="track-info">92. Thanh Tung - Phú Quang - Quốc Bảo</span></li>		
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/93.NgocLe-TranTien-70namtinhcaVN.mp3">
+            <span class="track-info">93. Ngọc Lễ - Trần Tiến</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/94.SoluocveamnhacVN34nam1975-2009.mp3">
+            <span class="track-info">94. Sơ Lược Về Âm Nhạc Việt Nam năm 1975</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/95.loicamon1.mp3">
+            <span class="track-info">95. Lời Cám Ơn 1</span></li>			
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/70NamTinhCaVN/95.loicamon2.mp3">
+            <span class="track-info">95. Lời Cám Ơn 2</span>
+			<a href="https://t-van.net/episode-95-c%e1%bb%a7a-70-nam-tnh-ca-trong-tn-nh%e1%ba%a1c-vi%e1%bb%87t-nam/" target="_blank" class="external-link">Đọc thêm ...</a></li>				
+	</div>
+    <! folder B tracks list >
+	<div> 
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ANHTRANGNOIHOLONGTOI-NhacHoa_lvDinhCongMinh_TrucPhuong-GocAcoustic.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">ÁNH TRĂNG NÓI HỘ LÒNG TÔI</span>
+				<span class="info-cell cell-middle">Nhạc NQ, lv: Đinh Công Minh & Trúc Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@gocacoustic/videos' target='_blank'>Góc Acoustic   </a> </span>	</span>			
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=hHHyW26ThQw" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/hHHyW26ThQw/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/AiNoiVoiEm-MinhKyHoaiLinh-AiKbcCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">AI NÓI VỚI EM</span>
+				<span class="info-cell cell-middle">Minh Kỳ & Hoài Linh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@aikbc/videos' target='_blank'>AI KBC Cover  </a> </span>	</span>			
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=5k4gWVgMvPY" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/5k4gWVgMvPY/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BAIKHONGTENSO2-V%C5%A9%20Th%C3%A0nh%20An-RuDoiHiuQuanh.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">BÀI KHÔNG TÊN SỐ 2</span>
+				<span class="info-cell cell-middle">Vũ Thành An</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RuDoiHiuQuanh/videos' target='_blank'>Ru Đời Hiu Quạnh</a> </span>	</span>				
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=Apsa3w90iJM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/Apsa3w90iJM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BaiTangoChoEm-LamPhuong-MusicVietAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">BÀI TANGO CHO EM</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@MUSICVIETAI25/videos' target='_blank'>Music Việt AI-RR</a> </span>	</span>				
+			<button class="youtube-link" data-yt-url="https://youtu.be/1mCD3FqStzY" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/1mCD3FqStzY/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BaiThanhCaBuon-NguyenVu-RosieWellss.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">BÀI THÁNH CA BUỒN</span>
+				<span class="info-cell cell-middle">Nguyễn Vũ</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@rosiewellss6305/videos' target='_blank'>Rosie Wellss</a> </span>	</span>				
+			<button class="youtube-link" data-yt-url="https://youtu.be/y9iXdWlnykM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/y9iXdWlnykM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+								
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BANTINHCUOI-NguyenSa_NgoThuyMien-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">BẢN TÌNH CUỐI</span>
+				<span class="info-cell cell-middle">Nguyên Sa & Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=0QxVM4FeZCQ" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/0QxVM4FeZCQ/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>		
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BIETLY-DzoanMan-NhacCoverAI_RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">BIỆT LY</span>
+				<span class="info-cell cell-middle">Dzoãn Mẫn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>		
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=R6WU_Jta-3Y" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/R6WU_Jta-3Y/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BongNhoGiaoDuong-PhuongLinh-HoaiNiemXua.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">BÓNG NHỎ GIÁO ĐƯỜNG</span>
+				<span class="info-cell cell-middle">Phượng Linh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI  </a> </span>	</span>		
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=pGn7H9Uoj0U" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/pGn7H9Uoj0U/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+					
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/CHIECLACUOICUNG-TuanKhanh-DanhAiCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">CHIẾC LÁ CUỐI CÙNG</span>
+				<span class="info-cell cell-middle">Tuấn Khanh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@DanhAICover' target='_blank'>Danh AI</a> </span>	</span>					
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=Z4FIDE3K4IA" data-prefix="AI/"> 
+				<img src="https://img.youtube.com/vi/Z4FIDE3K4IA/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 		
+				
+				
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/CHIEUNAYKHONGCOEM-NgoThuyMien-NhacGiaiTri.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">CHIỀU NAY KHÔNG CÓ EM</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@NhacGiaiTri80/videos' target='_blank'>Nhạc Giải Trí</a> </span>	</span>					
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=yjtlsMYvbqA"  data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/yjtlsMYvbqA/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>					
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/CONYEUEMMAI-NguyenTrungCang-RosieWellss.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">CÒN YÊU EM MÃI</span>
+				<span class="info-cell cell-middle">Nguyễn Trung Cang</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@rosiewellss6305/videos' target='_blank'>Rosie Wellss</a> </span>	</span>					
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=9HUgCPavQhE"  data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/9HUgCPavQhE/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>					
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/CungDanXua-VanCao-RyanNhacCoverAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">CUNG ĐÀN XƯA</span>
+				<span class="info-cell cell-middle">Văn Cao</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI</a> </span>	</span>					
+			<button class="youtube-link" data-yt-url="https://youtu.be/Dy-4H8TKzK8"  data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/Dy-4H8TKzK8/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>					
+
+
+				
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/DIVANG-TrinhNamSon-MusicBoxCover.mp3">				
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">DĨ VÃNG</span>
+				<span class="info-cell cell-middle">Trịnh Nam Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@MusicBox_cover/videos' target='_blank'>Music Box Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=S4tAbDoC2IU" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/S4tAbDoC2IU/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/DiemXua-TrinhCongSon-HoaiNiemXua.mp3">				
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">DIỄM XƯA</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=_Xqxv5hmjrM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/_Xqxv5hmjrM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>				
+								
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/DuAm-NguyenVanTy-NhacCoverAI-RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">DƯ ÂM</span>
+				<span class="info-cell cell-middle">Nguyễn Văn Tý</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=nwfaUyju9bQ" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/nwfaUyju9bQ/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/DenKhuya-LamPhuong-Nat%20MusicLand.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">ĐÈN KHUYA</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nat_music_land/videos' target='_blank'>NAT Music Land</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/jkAunCgiwqU" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/jkAunCgiwqU/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/DenKhuya-LamPhuong-MusixBoxCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">ĐÈN KHUYA</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@MusicBox_cover/videos' target='_blank'>Music Box Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=EkFqS3EQeUM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/EkFqS3EQeUM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/EMCONNHOHAYEMDAQUEN-TrinhCongSon-LoveSongIdol.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">EM CÒN NHỚ HAY EM ĐÃ QUÊN</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@lovesongidol/videos' target='_blank'>Love Song Idol</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=xSbsc7FtE3E" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/xSbsc7FtE3E/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>				    			    
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/EmDenThamEmMotChieuMu-ToVu-NhacCoverAIRyanNguyen.mp3 ">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">EM ĐẾN THĂM EM MÔT CHIỀU MƯA</span>
+				<span class="info-cell cell-middle">Tô Vũ</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos ' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=8uKuw_VCV4g" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/8uKuw_VCV4g/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>				    			    
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/EmHayNguDi-TrinhCongSon-Minhhai_Nguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">EM HÃY NGỦ ĐI</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@minhhainguyen8557/videos' target='_blank'>Minhhai Nguyen</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=BigdGgifS8s" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/BigdGgifS8s/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>					
+
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/GIATAICUAME-TrinhCongSon-AIMemoryCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">GIA TÀI CỦA MẸ</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/user/maytinhdaohiep/videos' target='_blank'>AI Memory Cover</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=TFShTFEjWuA" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/TFShTFEjWuA/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/GiotNuocMatNga-NgoThuyMien-Bmusic.mp3
+">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">GIỌT NƯỚC MẮT NGÀ</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@BMusic-e2e/videos' target='_blank'>BMusic</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=MScZvUaitJM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/MScZvUaitJM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/GIOTMUATHU-BuiCongKy_%C4%90angThePhong-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">GIỌT MƯA THU</span>
+				<span class="info-cell cell-middle">Bùi Công Kỳ & Đặng Thế Phong</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=NnhpIjXUM7A" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/NnhpIjXUM7A/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>					
+ 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/GOIGIACMOXUA-LeHoangLong-NhacCoverAI_RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">GỢI GIẤC MƠ XƯA</span>
+				<span class="info-cell cell-middle">Lê Hoàng Long</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=bTvnXvySzRc" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/bTvnXvySzRc/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	 
+ 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/GuiVeAnh-DoThu-RyanNhacCoverAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">GỬI VỀ ANH</span>
+				<span class="info-cell cell-middle">Đỗ Thu</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/rrt3JFa8Dts" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/rrt3JFa8Dts/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	 
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/HaiMuaNoel-DaiPhuongTrang-RuDoiHiuQuanh.mp3
+">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">HAI MÙA NOEL</span>
+				<span class="info-cell cell-middle">Đài Phương Trang</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RuDoiHiuQuanh/videos' target='_blank'>Ru Đời Hiu Quạnh</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=het7F2z5RAc" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/het7F2z5RAc/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+ 
+ 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/HOAICAM-CungTien-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">HOÀI CẢM</span>
+				<span class="info-cell cell-middle">Cung Tiến</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=pFNK7PTz658" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/pFNK7PTz658/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+ 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/HoaiCam-CungTien-RyanNhacCoverAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">HOÀI CẢM</span>
+				<span class="info-cell cell-middle">Cung Tiến</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/Z1m9zTIkJnM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/Z1m9zTIkJnM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+  
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/HuongXua-CungTien-RyanNhacCoverAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">HƯƠNG XƯA</span>
+				<span class="info-cell cell-middle">Cung Tiến</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/JTtQi5rfuRw" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/JTtQi5rfuRw/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+ 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/KhiDaYeu-PhuongLing-NhacCoverAiRyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">KHI ĐÃ YÊU</span>
+				<span class="info-cell cell-middle">Phượng Linh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos ' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=X8oq4IGie2g" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/X8oq4IGie2g/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/LOICHONGUOIYEUNHO-TranThienThanh-AIKBCCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">LỜI CHO NGƯỜI YÊU NHỎ</span>
+				<span class="info-cell cell-middle">Trần Thiện Thanh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@aikbc/videos' target='_blank'>AI KBC Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/IxJZDf2Jttw" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/IxJZDf2Jttw/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/LoiConXinChua-LeKimKhanh-AiKbc.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">LỜI CON XIN CHÚA</span>
+				<span class="info-cell cell-middle">Lê Kim Khánh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@aikbc/videos' target='_blank'>AI KBC Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/ovmzrHmauzM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/ovmzrHmauzM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	   
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MotDoiQuenLang-NgoThuyMien-AiKbc.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MỘT ĐỜI QUÊN LÃNG</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@aikbc/videos' target='_blank'>AI KBC Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/YhHrrFKztl8" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/YhHrrFKztl8/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MUACHIEU-AnhBang-MPMelody.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MƯA CHIỀU</span>
+				<span class="info-cell cell-middle">Anh Bằng</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@mpmelody9c/videos' target='_blank'>MP Melody</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/DnC4QFdqkmQ" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/DnC4QFdqkmQ/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MUACHIEUKYNIEM-DuyYen_QuocKy-RuDoiHiuQuanh.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MƯA CHIỀU KỶ NIỆM</span>
+				<span class="info-cell cell-middle">Duy Yên & Quốc Kỳ</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RuDoiHiuQuanh/videos' target='_blank'>Ru Đời Hiu Quạnh</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=dk48VUqaxzI" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/dk48VUqaxzI/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MuaSaoSang-NguyenVanDong-AiKbc.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MÙA SAO SÁNG</span>
+				<span class="info-cell cell-middle">Nguyễn Văn Đông</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@aikbc/videos' target='_blank'>AI KBC Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/0Afj2_9mrLM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/0Afj2_9mrLM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MUATHUCHET-PhamDuy-RosieWellss.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MÙA THU CHẾT</span>
+				<span class="info-cell cell-middle">Phạm Duy</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@rosiewellss6305/videos' target='_blank'>Rosie Wellss</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=P-r9caVuz-A" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/P-r9caVuz-A/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+				
+  
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MUATHUCHOEM-ThuyAnh_NgoThuyNien-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MÙA THU CHO EM</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=TZ_T9ddfb1k" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/TZ_T9ddfb1k/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MUATHUCHOEM-NgoThuyMien-HoaiNiemXuaAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MÙA THU CHO EM</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=QkLS60uiBnc" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/QkLS60uiBnc/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+  
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MuaHong-TrinhCongSon-NhacCoverAI-RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MƯA HỒNG</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=h0PxVYmdMkU" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/h0PxVYmdMkU/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>  	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MUAHONG-TrinhCongSon-NhacCoverAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">MƯA HỒNG</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nhaccover_ai/videos' target='_blank'>Nhạc Cover  AI</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=v9stPLsRpw0" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/v9stPLsRpw0/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>  	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NangChieu-LeTrongNguyen-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NẮNG CHIỀU</span>
+				<span class="info-cell cell-middle">Lê Trọng Nguyễn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son  </a> </span>	</span>
+            <button class="youtube-link" data-yt-url="https://youtu.be/guIOHRyic10" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/guIOHRyic10/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>								
+ 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NGAYVE-HoangGiac-NhacCoverAIRyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NGÀY VỀ</span>
+				<span class="info-cell cell-middle">Hoàng Giác </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos ' target='_blank'>Ryan Nhạc Cover AI    </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=5adickwTTwY" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/5adickwTTwY/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NGUOICONGAIVIETNAMDAVANG-TrinhCongSon-AIMemoryCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NGƯỜI CON GÁI VIỆT NAM DA VÀNG</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/user/maytinhdaohiep/videos' target='_blank'>AI Memory Cover</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=cCxjKT-ALNQ" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/cCxjKT-ALNQ/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>  				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NgamNgui-PhamDuy-NhacCoverAI-RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NGẬM NGÙI</span>
+				<span class="info-cell cell-middle">Phạm Duy</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=a1Z02VZ4CI8" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/a1Z02VZ4CI8/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>												
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NganCach-YVan-NATmusicLand.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NGĂN CÁCH</span>
+				<span class="info-cell cell-middle">Y Vân</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nat_music_land/videos' target='_blank'>NAT Music Land  </a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://youtu.be/XshyamQn520" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/XshyamQn520/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>								
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NguoiTinhVaQueHuong-TrinhLamNgan-NhacXuaCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NGƯỜI TÌNH VÀ QUÊ HƯƠNG</span>
+				<span class="info-cell cell-middle">Trịnh Lâm Ngân</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nhacxuacovers/videos' target='_blank'>Nhạc Xưa Cover  </a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://youtu.be/UjCM3BzLzV4" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/UjCM3BzLzV4/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>								
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NHINNHUNGMUATHUDI-TrinhCongSon-HoaiNiemAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NHÌN NHỮNG MÙA THU ĐI</span>
+				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
+				<span class="info-cell cell-bottom"><a href='ttps://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=bEVsI6LSF7s" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/bEVsI6LSF7s/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>			
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NhoOi-DaoQuangNhat-NguoiCuRadio.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NHỎ ƠI</span>
+				<span class="info-cell cell-middle">Đào Quang Nhật</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nguoicuradio/videos' target='_blank'>Người Cũ Radio</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=uKabfq0Z4x8" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/uKabfq0Z4x8/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>			
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/NOIDAUMUONMANG-NgoThuyMien-RudoiHiuQuanh.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">NỖI ĐAU MUỘN MÀNG</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RuDoiHiuQuanh/videos' target='_blank'>Ru Đời Hiu Quạnh</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=_px691Akrlk" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/_px691Akrlk/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>		
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ONOINAOEMCONNHO-NgoThuyMien-RosieWells.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">Ở NƠI NÀO EM CÒN NHỚ</span>
+				<span class="info-cell cell-middle">Ngô Thụy Miên</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@rosiewellss6305/videos' target='_blank'>Rosie Wellss</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=MgvkyZ0F_z0" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/MgvkyZ0F_z0/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>		
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/PhoVangEmRoi-ManhPhat-Ryan_Nhac_Cover_AI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">PHỐ VẮNG EM RỒI</span>
+				<span class="info-cell cell-middle">Mạnh Phát</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a></span>	</span> 			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=3A0spYmxhhk" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/3A0spYmxhhk/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/PHUTCUOI-LamPhuong-MusicBoxCover.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">PHÚT CUỐI</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"> <a href='https://www.youtube.com/@MusicBox_cover/videos' target='_blank'>Music Box Cover</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=Ank-5G6JgXw" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/Ank-5G6JgXw/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ROIMAITOIDUAEM-TruongSa-NhacCoverAI_RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">RỒI MAI TÔI ĐƯA EM</span>
+				<span class="info-cell cell-middle">Trường Sa</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=2uunBPPU06Q" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/2uunBPPU06Q/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ROIMAITOIDUAEM-TruongSa-HoaiNiemXua.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">RỒI MAI TÔI ĐƯA EM</span>
+				<span class="info-cell cell-middle">Trường Sa</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=t0juDySBcKY" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/t0juDySBcKY/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>					
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/RONGCHOICUOITROIQUENLANG-HoangThiTho-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">RONG CHƠI CUỐI TRỜI QUÊN LÃNG</span>
+				<span class="info-cell cell-middle">Hoàng Thi Thơ</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=Z7aR6TSZ44Q" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/Z7aR6TSZ44Q/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>			
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/SAYMOTDOIVIEM-KenQuach_HuongMyB%C3%B4ng-KenQuachOfficial.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">SAY MỘT ĐỜI VÌ EM</span>
+				<span class="info-cell cell-middle">Ken Quách & HuongMyBông ©</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@KenQ_Musik/videos' target='_blank'>Ken Quach Official</a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=fUu2KrYRqJg" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/fUu2KrYRqJg/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>	
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/SUOITOC-VanPhung-NhacCoverAIRyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">SUỐI TÓC</span>
+				<span class="info-cell cell-middle">Văn Phụng</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>				
+            <button class="youtube-link" data-yt-url="https://youtu.be/EKjsPLegNe0" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/EKjsPLegNe0/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>		
+				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/THUCA-PhamManhCuong-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">THU CA</span>
+				<span class="info-cell cell-middle">Phạm Mạnh Cương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=UG-NGEg3F2E" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/UG-NGEg3F2E/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/THUSAU-LamPhuong-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">THU SẦU</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=twRmBIRH4_4" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/twRmBIRH4_4/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/THUSAU-LamPhuong-MPMelody.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">THU SẦU</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@mpmelody9c/videos' target='_blank'>MP Melody</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=23NC3QFqjng" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/23NC3QFqjng/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ThuongHoaiNganNam-PhamManhCuong-NguoiCuRadio.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">THƯƠNG HOÀI NGÀN NĂM</span>
+				<span class="info-cell cell-middle">Phạm Mạnh Cương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nguoicuradio/videos' target='_blank'>Người Cũ Radio</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=TyDcqdQbEAQ" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/TyDcqdQbEAQ/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TinhDauTinhCuoi-TranThienThanh-Slowrock%40music.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TÌNH ĐẦU TÌNH CUỐI</span>
+				<span class="info-cell cell-middle">Trần Thiện Thanh </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Slowrock75music75/videos' target='_blank'>Slowrock75 music75</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=frzgSrMkIKI" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/frzgSrMkIKI/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+	
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TinhBoVo-LamPhuong-HoaiNiemXuaAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TÌNH BƠ VƠ</span>
+				<span class="info-cell cell-middle">Lam Phương </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=4zETaWkBPaU" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/4zETaWkBPaU/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+
+	
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TINHKHUCCHIEUMUA-NguyenAnh9-LeoSon.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TÌNH KHÚC CHIỀU MƯA</span>
+				<span class="info-cell cell-middle">Nguyễn Ánh 9 </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@leoson-v6/videos' target='_blank'>Leo Son</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=QFPSdUZVtVI" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/QFPSdUZVtVI/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TINHNONGCHAY-NhacNQ-lvAnhBang-LoveSongIdol.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TÌNH NỒNG CHÁY</span>
+				<span class="info-cell cell-middle">Nhạc NQ, lv Anh Bằng </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@lovesongidol/videos' target='_blank'>Love Song Idol</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=BJVOx97JUoA" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/BJVOx97JUoA/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TinhNguoiNgoaiDao-NguyenVanDong-HoaiNiemXuaAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TÌNH NGƯỜI NGOẠI ĐẠO</span>
+				<span class="info-cell cell-middle">Nguyễn Văn Đông </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@Ho%C3%A0iNi%E1%BB%87mX%C6%B0aAI/videos' target='_blank'>Hoài Niệm Xưa AI</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://youtu.be/OFeFnuuMhfg" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/OFeFnuuMhfg/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 				
+				
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TinhVanChuaYen-LamPhuong-MusicVietAI-RR.mp3
+">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TÌNH VẪN CHƯA YÊN</span>
+				<span class="info-cell cell-middle">Lam Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@MUSICVIETAI25/videos' target='_blank'>Music Việt AI-RR</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=EDhT_N2xaDs" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/EDhT_N2xaDs/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 								
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ThuVeTrongMatEm-PhamManhCuong-Ryan_Nhac_Cover_AI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">THU VỀ TRONG MẮT EM</span>
+				<span class="info-cell cell-middle">Phạm Mạnh Cương </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=GvvanHWQIY0" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/GvvanHWQIY0/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TRALAIEM-%C4%90ucQuynh-NATMusicLand.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TRẢ LẠI EM</span>
+				<span class="info-cell cell-middle">Đức Quỳnh</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nat_music_land/videos' target='_blank'>NAT Music Land</a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=4bdzmZOnGvI" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/4bdzmZOnGvI/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+				
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/TUMOTGIACMO-MaiAnhViet-NhacCoveAI_RyanNguyen.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">TỪ MỘT GIẤC MƠ</span>
+				<span class="info-cell cell-middle">Mai Anh Việt</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@RYANNGUYEN-x8g/videos' target='_blank'>Ryan Nhạc Cover AI  </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=7y5NxgIB4qE" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/7y5NxgIB4qE/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>  				
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/XEHOAMOTCHIEC-HoangThiThi-GocAcoustic.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">XE HOA MỘT CHIẾC</span>
+				<span class="info-cell cell-middle">Hoàng Thi Thơ </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@gocacoustic/videos' target='_blank'>Góc Acoustic   </a> </span>	</span>			
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=dw3NJXOyyHM" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/dw3NJXOyyHM/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li> 
+
+
+        <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/YEUEMGIUATROIQUENLANG-TruongSa-NhacVietAI.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">YÊU EM GIỮA ĐỜI QUÊN LÃNG</span>
+				<span class="info-cell cell-middle">Trường Sa </span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nhacvietAI-o9d/videos' target='_blank'>Nhạc AI Cover</a> </span>	</span>					
+            <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=PIPB2ih0_AU" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/PIPB2ih0_AU/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>  	
+	</div>					
+    </ul>
+
+	<button id="btn-scroll-top" title="Lên đầu trang">⬆️</button>
+	
+	<!-- Default Statcounter code for TapNhacCuaToi
+	https://anjou-sll.github.io/TapNhacCuaToi/ -->
+	<script type="text/javascript">
+		var sc_project=13187189; 
+		var sc_invisible=1; 
+		var sc_security="527b4294"; 
+	</script>
+	<script type="text/javascript"
+	src="https://www.statcounter.com/counter/counter.js" async></script>
+	<noscript><div class="statcounter"><a title="Web Analytics Made Easy -
+		Statcounter" href="https://statcounter.com/" target="_blank"><img
+		class="statcounter" src="https://c.statcounter.com/13187189/0/527b4294/1/"
+		alt="Web Analytics Made Easy - Statcounter"
+		referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+	<!-- End of Statcounter Code -->
+
+    <script>
+        const player = document.getElementById('audio-player');
+        const playlist = document.getElementById('playlist');
+        const tracks = playlist.querySelectorAll('li');
+        const currentTrackDisplay = document.getElementById('current-track');
+        const folderButtons = document.querySelectorAll('.folder-button');
+        const folderImage = document.getElementById('folder-image');
+        const folderText = document.getElementById('folder-text');
+		const fixedPlayerWrapper = document.getElementById('fixed-player-wrapper');
+        const folderLink = document.getElementById('folder-link');
+		const playAllSwitch = document.getElementById('play-all-switch');
+		const shuffleSwitch = document.getElementById('shuffle-switch');
+		const scrollTopButton = document.getElementById('btn-scroll-top');
+		const filterSection = document.getElementById('filter-section');
+		const composerSelect = document.getElementById('composer-select');
+		const creatorSelect = document.getElementById('creator-select');		
+        const folderDescriptions = {
+            '70NamTinhCaVN/': {
+                image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/HoaiNam.png?q=80&w=100&h=100&fit=contain&auto=format', 
+                description: "70 Năm Tình Ca Trong Tân Nhạc Việt Nam là một chương trình 'Tân nhạc dẫn giải' bằng audio, được phát thanh 95 kỳ trên đài SBS ở Úc châu.<br>Người biên soạn, phụ trách chương trình và cũng là người đọc là ông <a href='https://t-van.net/author/hoainam/' target='_blank'>Hoài Nam.</a> , cộng tác viên của đài SBS.<br>Dù các bài phát thanh đã kết thúc từ rất lâu (2010), dư âm của nó vẫn còn vang vọng. Hôm nay, như một lời tri ân đến ông Hoài Lâm, tôi làm một việc mà nhiều người khác đã từng làm, là tiếp tục làm lan tỏa công trình giá trị này. .<br><br>Trong khi đang thực hiện trang này, tôi tình cờ phát hiện có trang web <a href='https://t-van.net/nghe-70-nam-tnh-ca-trong-tn-nh%e1%ba%a1c-vi%e1%bb%87t-nam-c%e1%bb%a7a-hai-nam/' target='_blank'> <b> T.Vấn & Bạn Hữu </b> </a>, chẳng những đã đăng tải toàn bộ chương trình này từ lâu, mà còn có thêm nhiều hình ảnh, bài viết liên quan. Vậy xin mạn phép dẫn các đường link trực tiếp các bài phụ lục thú vị này tại các phần <b>'Đọc thêm ...'</b>phía dưới, và chân thành cám ơn ông T.Vấn <br><br>Sau cùng, xin lưu ý là bạn đọc có thể dễ dàng tải từng bài audio về bằng cách bấm vào nút ' &vellip; ', phía bên phải hình volume &#128266;  <br> Hoặc tải tất cả về một lần, trong một file rất lớn (1Gb) <a href='https://drive.google.com/file/d/1t2LRJqWESEJh1Bs8FouaxSsu7zWz3dbV/view?usp=sharing' target='_blank'>tại đây.</a> "  ,
+                alt: "Hoài Nam",
+                link: '#',  //'https://t-van.net/nghe-70-nam-tnh-ca-trong-tn-nh%e1%ba%a1c-vi%e1%bb%87t-nam-c%e1%bb%a7a-hai-nam/', 
+                linkText: 'Đọc tiếp ...'
+            },
+            'AI/': {
+                image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/disclaimer_round100x100.jpg?q=80&w=100&h=100&fit=contain&auto=format', 
+                description: 'Đây là trang web cá nhân không có mục đích thương mại, được làm ra, trước là để tôi có thể nghe nhạc mà không bị gián đoạn, mà không cần phải xem video, sau là để giới thiệu một món ăn tinh thần mới lạ, phong phú và đa dạng, đến đôi ba người thân quen.<br><br>Các bài hát dưới đây tôi chọn theo sở thích cá nhân, dựa trên phần âm thanh chứ không trên phần hình ảnh, và tránh các bài quá "ồn ào", hoặc đi quá xa so với nguyên tác.<br><br>Tôn trọng các tác giả đã sáng tạo ra videos,  mà tôi xin tạm mặc định là chủ các kênh youtube, nhạc trong phần này chỉ nghe chứ không thể tải xuống được. Ngoài ra tôi đã nêu rõ danh tính các tác giả, đường dẫn tới kênh của họ và đường dẫn tới từng video mà tôi đã trích xuất phần âm thanh.<br>Thính giả nào muốn xem phần video, hoặc muốn khám phá thêm, hoặc có bình luận gì về nội dung các bài hát thì xin vào các đường dẫn đã để sẵn.<br><br>Hy vọng các trích dẫn của tôi không làm ai phật lòng. Nếu có lầm lẫn gì, hay có phạm đến quyền lợi của vị nào thì <a href=mailto:“anjou.sur.le.lac@gmail.com">vui lòng cho biết</a> để tôi sửa đổi.<br>Thành thật cám ơn các tác giả sáng tác nhạc và các nhà sáng tạo nội dung.',  
+                alt: '', 
+                link: '#', // **MODIFIED:** Use a dummy link or remove it completely for a pure button
+                linkText: 'Đọc tiếp ...' 
+            },
+            '': { 
+                image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/CodingWorkFromHomeGIFbyPersona.gif',
+                description: '... đang suy nghĩ ... Xin đừng chờ!', 
+                alt: '', 
+                link: '',
+                linkText: ''
+            }
+        };
+
+	function toggleScrollTopButton() {
+		// Determine the scroll threshold (e.g., 500 pixels down)
+		// window.scrollY is the current vertical scroll position
+		const scrollThreshold = 500; 
+
+		if (window.scrollY > scrollThreshold) {
+			// Show the button
+			scrollTopButton.style.display = 'block';
+		} else {
+			// Hide the button
+			scrollTopButton.style.display = 'none';
+		}
+	}
+		
+		function setupExternalLinkListeners() {
+			// 1. Setup listeners for the YouTube Buttons (Folder B)
+			const ytButtons = document.querySelectorAll('.youtube-link');
+			ytButtons.forEach(button => {
+				// Ensure the button is only clickable if it belongs to the currently selected folder
+				if (button.getAttribute('data-prefix') === 'AI/') {
+					button.addEventListener('click', (event) => {
+						// STOP PROPAGATION: Prevents the click from reaching the parent <li> and starting the MP3
+						event.stopPropagation(); 
+                
+						const url = event.currentTarget.getAttribute('data-yt-url');
+						if (url) {
+						window.open(url, '_blank'); 
+						}
+					});
+				}
+			});
+
+			// 2. Setup listeners for the new External Links (Folder A)
+			const externalLinks = document.querySelectorAll('.external-link');
+			externalLinks.forEach(link => {
+				link.addEventListener('click', (event) => {
+					// THE FIX: Stop the click event from propagating to the parent <li> element
+					event.stopPropagation(); 
+            
+					// Note: Since this is a standard <a> tag, the browser handles the navigation (window.open) 
+					// automatically based on the href and target="_blank" attributes in the HTML.
+					// We only need to stop the propagation here.
+				});
+			});
+		}
+
+        // --- Core Functions (Updated) ---
+
+		function populateFilterOptions() {
+			const composers = new Set();
+			const creators = new Set();
+
+			// Loop through all tracks
+			tracks.forEach(track => {
+				const src = track.getAttribute('data-src');
+				
+				// Only target tracks in Folder B (AI/)
+				if (src.includes('AI/')) {
+					const trackInfo = track.querySelector('.folder-b-info');
+					if (trackInfo) {
+						// Composer is in the cell-middle
+						const composerElement = trackInfo.querySelector('.cell-middle');
+						if (composerElement) {
+							// Extract text, remove leading/trailing whitespace, and add to Set
+							composers.add(composerElement.textContent.trim());
+						}
+
+						// Creator is in the cell-bottom, inside the <a> tag
+						const creatorLink = trackInfo.querySelector('.cell-bottom a');
+						if (creatorLink) {
+							// Extract text, remove leading/trailing whitespace, and add to Set
+							creators.add(creatorLink.textContent.trim());
+						}
+					}
+				}
+			});
+
+			// Helper function to populate a select element
+			const appendOptions = (selectElement, dataSet) => {
+				// Clear any existing options (besides "All")
+				while (selectElement.options.length > 1) {
+					selectElement.remove(1);
+				}
+				
+				// Convert Set to Array, sort alphabetically, and add options
+				Array.from(dataSet).sort().forEach(item => {
+					const option = document.createElement('option');
+					option.value = item;
+					option.textContent = item;
+					selectElement.appendChild(option);
+				});
+			};
+
+			appendOptions(composerSelect, composers);
+			appendOptions(creatorSelect, creators);
+		}
+
+		function applyFilters() {
+			const selectedComposer = composerSelect.value;
+			const selectedCreator = creatorSelect.value;
+
+			tracks.forEach(track => {
+				const src = track.getAttribute('data-src');
+				
+				// Only apply filtering logic to tracks currently belonging to Folder B
+				if (!src.includes('AI/')) {
+					return; // Skip tracks that aren't Folder B
+				}
+
+				const trackInfo = track.querySelector('.folder-b-info');
+				if (!trackInfo) return; // Should not happen for Folder B tracks
+
+				const trackComposer = trackInfo.querySelector('.cell-middle').textContent.trim();
+				const trackCreatorLink = trackInfo.querySelector('.cell-bottom a');
+				const trackCreator = trackCreatorLink ? trackCreatorLink.textContent.trim() : '';
+				
+				// Check Composer Match
+				const composerMatch = (selectedComposer === 'all' || trackComposer === selectedComposer);
+				
+				// Check Creator Match
+				const creatorMatch = (selectedCreator === 'all' || trackCreator === selectedCreator);
+				
+				// A track is visible if it matches BOTH criteria
+				const isMatch = composerMatch && creatorMatch;
+				
+				track.classList.toggle('hidden-track', !isMatch);
+			});
+
+			// IMPORTANT: After filtering, re-select the first visible track and pause the player
+			const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
+			playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
+			
+			if (firstVisibleTrack) {
+				firstVisibleTrack.click();
+				player.pause();
+			} else {
+				player.pause();
+				player.src = '';
+				currentTrackDisplay.textContent = 'Now Playing: No songs match the filter.';
+			}
+		}
+
+        function updateDescription(prefix) {
+            const data = folderDescriptions[prefix];
+            if (data) {
+                folderImage.src = data.image;
+                folderImage.alt = data.alt;
+                folderText.innerHTML = data.description;
+			
+				// apply truncation class and reset link behavior
+				folderText.classList.add('truncate');
+				folderText.classList.remove('expanded');
+				
+				folderLink.href = '#';
+				folderLink.textContent = data.linkText;
+				folderLink.style.display = 'block';
+
+				// IMPORTANT: Remove any old listeners and add the new toggle listener
+				folderLink.removeEventListener('click', handleFolderATrackLink);
+				folderLink.addEventListener('click', handleFolderBDescriptionToggle);
+
+            } else {
+                folderImage.src = '';
+				folderImage.style.display = 'none';
+                folderImage.alt = ''; 
+                folderText.textContent = ''; 
+                folderLink.style.display = 'none';
+            }
+        }
+
+		function handleFolderBDescriptionToggle(event) {
+			event.preventDefault(); // Stop default link behavior (prevents jumping to top)
+			
+			if (folderText.classList.contains('truncate')) {
+				// EXPAND: Show all text
+				folderText.classList.remove('truncate');
+				folderText.classList.add('expanded');
+				folderLink.textContent = 'Thâu nhỏ lại ...';
+			} else {
+				// COLLAPSE: Truncate text
+				folderText.classList.remove('expanded');
+				folderText.classList.add('truncate');
+				folderLink.textContent = 'Đọc tiếp ...';
+			}
+		} 
+		// Use a separate function for Folder A links to maintain external link behavior
+		function handleFolderATrackLink(event) {
+			event.stopPropagation(); // Standard stop propagation for external link
+		}
+		
+        function filterPlaylist(prefix) {
+            tracks.forEach(track => {
+                const src = track.getAttribute('data-src');
+                const isMatch = prefix === "" || src.includes(prefix);
+                track.classList.toggle('hidden-track', !isMatch);
+            });
+            
+            // Re-select and play the first visible track
+            const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
+            if (firstVisibleTrack && !firstVisibleTrack.classList.contains('playing')) {
+                playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
+                firstVisibleTrack.click(); 
+                player.pause(); 
+            } else if (!firstVisibleTrack) {
+                player.pause();
+                player.src = '';
+                currentTrackDisplay.textContent = 'No songs in this folder.';
+            }
+        }
+		
+        function getVisibleTracks() {
+			// Helper function to return only the tracks that are not hidden
+			return Array.from(tracks).filter(t => !t.classList.contains('hidden-track'));
+		}
+
+		function playNextTrack() {
+			const visibleTracks = getVisibleTracks();
+			const currentTrackElement = playlist.querySelector('.playing');
+			
+			if (visibleTracks.length === 0) return;
+
+			let nextTrackElement;
+
+			if (shuffleSwitch.checked) {
+				// Shuffle logic: pick a random track from the visible list
+				const randomIndex = Math.floor(Math.random() * visibleTracks.length);
+				nextTrackElement = visibleTracks[randomIndex];
+			} else {
+				// Sequential logic: find the next track
+				const currentIndex = currentTrackElement ? visibleTracks.indexOf(currentTrackElement) : -1;
+				
+				if (currentIndex === visibleTracks.length - 1) {
+					// Loop back to the first track
+					nextTrackElement = visibleTracks[0];
+				} else {
+					// Play the next track in the visible list
+					nextTrackElement = visibleTracks[currentIndex + 1];
+				}
+			}
+
+			if (nextTrackElement) {
+				nextTrackElement.click();
+			}
+		}
+
+		function playPreviousTrack() {
+			const visibleTracks = getVisibleTracks();
+			const currentTrackElement = playlist.querySelector('.playing');
+
+			if (visibleTracks.length === 0) return;
+
+			let prevTrackElement;
+
+			// We only use sequential logic for "Previous" for simplicity and predictability.
+			const currentIndex = currentTrackElement ? visibleTracks.indexOf(currentTrackElement) : -1;
+
+			if (currentIndex > 0) {
+				// If not the first track, go back one
+				prevTrackElement = visibleTracks[currentIndex - 1];
+			} else if (currentIndex === 0) {
+				// If the first track, loop to the last track
+				prevTrackElement = visibleTracks[visibleTracks.length - 1];
+			} else {
+				// If no track is playing, select the first one
+				prevTrackElement = visibleTracks[0];
+			}
+
+			if (prevTrackElement) {
+				prevTrackElement.click();
+			}
+		}
+		
+		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'FolderC/'];
+        
+		function handleTrackClick(event) {
+			// Stop Propagation Check (CRITICAL)
+			// Ignore clicks on the YouTube button OR the new link inside the track info
+			if (event.target.closest('.youtube-link') || event.target.closest('.folder-b-info a')) {
+				return; // Do nothing if the YouTube button or the Creator link was clicked
+			}
+            
+            tracks.forEach(t => t.classList.remove('playing'));
+            const clickedTrack = event.currentTarget;
+            clickedTrack.classList.add('playing');
+
+			clickedTrack.scrollIntoView({
+				behavior: 'smooth', // Optional: adds a smooth animation
+				block: 'center'     // Optional: centers the element in the viewport
+			});
+            
+			const source = clickedTrack.getAttribute('data-src');
+            player.src = source;
+            player.play();
+            // Use the text from the .track-info span, not the whole LI
+            currentTrackDisplay.textContent = 'Now Playing: ' + clickedTrack.querySelector('.track-info').textContent; 
+			
+			
+			// 3. NEW: Update title retrieval based on folder structure
+			let trackTitle = '';
+			const trackInfo = clickedTrack.querySelector('.track-info');
+
+			if (trackInfo && trackInfo.classList.contains('folder-b-info')) {
+				// For Folder B: Concatenate the TOP cell's content (the Title)
+				// We now target the .cell-top for the main title display
+				trackTitle = trackInfo.querySelector('.cell-top').textContent; 
+			} else if (trackInfo) {
+				// For Folder A and others: Use the main track-info content
+				trackTitle = trackInfo.textContent;
+			}
+
+			currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
+					
+			// Check if the source URL includes ANY of the restricted prefixes
+			const isRestricted = DOWNLOAD_RESTRICTED_PREFIXES.some(prefix => source.includes(prefix));
+
+			if (isRestricted) {
+				// If the file belongs to Folder B OR Folder C, disable the download option
+				player.setAttribute('controlsList', 'nodownload');
+				console.log(`Download restricted for file in: ${source}`);
+			} else {
+				// For all other folders/files (e.g., Folder A, Show All), enable the download option
+				player.removeAttribute('controlsList');
+				console.log("Download enabled.");
+			}	
+        }
+			
+
+		// --- Event Listeners ---
+        
+        tracks.forEach(track => {
+            // Attach the click handler to the LI
+            track.addEventListener('click', handleTrackClick);
+        });
+
+		folderButtons.forEach(button => {
+			button.addEventListener('click', (event) => {
+				folderButtons.forEach(btn => btn.classList.remove('active'));
+				event.currentTarget.classList.add('active');
+				
+				const prefix = event.currentTarget.getAttribute('data-prefix');
+				
+				// 🆕 NEW: Show the filter section ONLY for Folder B
+				filterSection.style.display = (prefix === 'AI/') ? 'block' : 'none';
+				
+				// 🆕 NEW: Reset filters if the user is leaving the AI/ folder
+				if (prefix !== 'AI/') {
+					composerSelect.value = 'all';
+					creatorSelect.value = 'all';
+				}
+				
+				updateDescription(prefix);
+				filterPlaylist(prefix); 
+				
+				// When filtering back to AI/, immediately apply the filters (if any are set)
+				if (prefix === 'AI/') {
+					applyFilters();
+				}
+			});
+		});
+		// --- Filter Control Listeners ---
+		composerSelect.addEventListener('change', applyFilters);
+		creatorSelect.addEventListener('change', applyFilters);
+		
+		player.addEventListener('ended', () => {
+			// Only proceed if 'Play All' is checked
+			if (playAllSwitch.checked) {
+				playNextTrack();
+			}
+		});
+
+		// --- Scroll to Top Logic ---
+
+		// 1. Monitor the window scroll event to show/hide the button
+		window.addEventListener('scroll', toggleScrollTopButton);
+
+		// 2. Handle the button click event
+		scrollTopButton.addEventListener('click', () => {
+			// Scroll the document body back to the top
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth' // Adds a smooth scrolling animation
+			});
+		});		
+
+		// --- Playback Control Listeners ---
+		document.getElementById('btn-next-track').addEventListener('click', playNextTrack);
+		document.getElementById('btn-previous-track').addEventListener('click', playPreviousTrack);	
+
+		setupExternalLinkListeners();
+		document.getElementById('btn-foldera').click();
+		
+		populateFilterOptions();	
+
+	</script>
+
+</body>
+</html>
