@@ -244,7 +244,52 @@
 		padding-right: 10px;
 		/* font-family: "Lucida Handwriting", cursive, sans-serif;*/
 	}
-    
+ 
+	/* --- Filter Section Styles --- */
+	#filter-section {
+		padding: 15px;
+		background-color: #ccc;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
+
+	#filter-section h3 {
+		margin-top: 0;
+		margin-bottom: 10px;
+		color: #333;
+	}
+
+	#filter-controls {
+		display: flex;
+		flex-wrap: wrap; /* Allows wrapping on mobile */
+		align-items: center;
+		gap: 10px; /* Reduced gap for smaller screens */
+	}
+
+	#filter-controls label {
+		font-weight: bold;
+		color: #555;
+	}
+
+	#filter-controls select {
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		font-size: 14px;
+	}
+
+	/* Mobile Adjustments (within @media (max-width: 400px)) */
+	@media (max-width: 400px) {
+		#filter-controls {
+			flex-direction: column; /* Stack controls vertically */
+			align-items: flex-start;
+			gap: 5px;
+		}
+		#filter-controls select {
+			width: 100%; /* Make dropdowns full width on mobile */
+		}
+	}
+ 
     /* End of Playback/List Styling */
     #playlist li:last-child { border-bottom: none; }
     .playing { font-weight: bold; color: #007bff; background-color: #e9f5ff; }
@@ -458,6 +503,22 @@
             <a href="#" id="folder-link" target="_blank" style="display: none;">Learn More</a>
         </div>
     </div>
+
+	<div id="filter-section" style="display:none; margin-bottom: 20px;">
+		<h3>Tùy Chọn (<span id="track-count-display">0</span> tracks)</h3>
+		<div id="filter-controls" style="display: flex; gap: 20px; align-items: center;">
+			<!-- 	<img id="filter-icon" src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/slidersForFilters.png" 
+			 alt="Filter Icon" style="width: 25px; height: 25px;"/> -->
+			<div>
+				<label for="composer-select">Sáng tác:</label>
+				<select id="composer-select" style="flex-grow: 1;">
+					<option value="all">Tất Cả Các Tác Giả </option> </select>	</div>
+			<div>
+				<label for="creator-select">Trình bày:</label>
+				<select id="creator-select" style="flex-grow: 1">
+					<option value="all">Tất Cả Các Người Trình Bày </option> </select> </div>
+		</div>
+	</div>
 
 	<div id="fixed-player-wrapper">
 		<audio id="audio-player" controls></audio>
@@ -1463,6 +1524,10 @@
 		const playAllSwitch = document.getElementById('play-all-switch');
 		const shuffleSwitch = document.getElementById('shuffle-switch');
 		const scrollTopButton = document.getElementById('btn-scroll-top');
+		const filterSection = document.getElementById('filter-section');
+		const composerSelect = document.getElementById('composer-select');
+		const creatorSelect = document.getElementById('creator-select');	
+		const trackCountDisplay = document.getElementById('track-count-display');		
         const folderDescriptions = {
             '70NamTinhCaVN/': {
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/HoaiNam.png?q=80&w=100&h=100&fit=contain&auto=format', 
@@ -1535,6 +1600,145 @@
 
         // --- Core Functions (Updated) ---
 
+		function populateFilterOptions() {
+			const composersMap = new Map();
+			const creatorsMap = new Map();
+			let totalFolderBTracks = 0; 
+
+			// 1. Calculate counts
+			tracks.forEach(track => {
+				const src = track.getAttribute('data-src');
+				
+				if (src.includes('AI/')) {
+					totalFolderBTracks++; // Keep this count for the filter header (80)
+					
+					const trackInfo = track.querySelector('.folder-b-info');
+					if (trackInfo) {
+						// Composer (cell-middle)
+						const composer = trackInfo.querySelector('.cell-middle').textContent.trim();
+						if (composer) {
+							composersMap.set(composer, (composersMap.get(composer) || 0) + 1);
+						}
+
+						// Creator (cell-bottom a)
+						const creatorLink = trackInfo.querySelector('.cell-bottom a');
+						const creator = creatorLink ? creatorLink.textContent.trim() : '';
+						if (creator) {
+							creatorsMap.set(creator, (creatorsMap.get(creator) || 0) + 1);
+						}
+					}
+				}
+			});
+
+			// 2. Helper function to populate a select element (using IIFE for isolated scope)
+			// We pass the UNIQUE COUNT (map.size) for the 'All' option, not total tracks
+			((selectElement, dataMap, allLabelText) => {
+				// Clear all existing options
+				while (selectElement.options.length > 0) {
+					selectElement.remove(0);
+				}
+				
+				// --- A. Add the "All" option (using UNIQUE ITEM count) ---
+				const allOption = document.createElement('option');
+				allOption.value = 'all';
+				// 🆕 FIX: Use the size of the Map (unique count) for the 'All' option
+				allOption.textContent = `${allLabelText} (${dataMap.size})`; 
+				selectElement.appendChild(allOption);
+				
+				// --- B. Add individual items (using specific counts from dataMap) ---
+				Array.from(dataMap.keys()).sort().forEach(item => {
+					const count = dataMap.get(item); 
+					
+					const option = document.createElement('option');
+					option.value = item; 
+					option.textContent = `${item} (${count})`;
+					selectElement.appendChild(option);
+				});
+			})(composerSelect, composersMap, 'Tất Cả Tác Giả');
+			
+			// Repeat for the Creator Select box
+			((selectElement, dataMap, allLabelText) => {
+				while (selectElement.options.length > 0) {
+					selectElement.remove(0);
+				}
+				
+				const allOption = document.createElement('option');
+				allOption.value = 'all';
+				// 🆕 FIX: Use the size of the Map (unique count) for the 'All' option
+				allOption.textContent = `${allLabelText} (${dataMap.size})`; 
+				selectElement.appendChild(allOption);
+				
+				Array.from(dataMap.keys()).sort().forEach(item => {
+					const count = dataMap.get(item); 
+					const option = document.createElement('option');
+					option.value = item; 
+					option.textContent = `${item} (${count})`;
+					selectElement.appendChild(option);
+				});
+			})(creatorSelect, creatorsMap, 'Tất Cả Người Trình Bày');
+			// 🆕 CRITICAL: Return the total count for use outside this function
+			return totalFolderBTracks;
+		}
+		function applyFilters() {
+			const selectedComposer = composerSelect.value;
+			const selectedCreator = creatorSelect.value;
+			// 🆕 Initialize counter for visible tracks
+			let visibleTrackCount = 0; 
+
+			tracks.forEach(track => {
+				const src = track.getAttribute('data-src');
+				
+				// Only apply filtering logic to tracks currently belonging to Folder B
+				if (!src.includes('AI/')) {
+					return; // Skip tracks that aren't Folder B
+				}
+
+				const trackInfo = track.querySelector('.folder-b-info');
+				if (!trackInfo) return; 
+
+				// Get actual values from the track
+				const trackComposer = trackInfo.querySelector('.cell-middle').textContent.trim();
+				const trackCreatorLink = trackInfo.querySelector('.cell-bottom a');
+				const trackCreator = trackCreatorLink ? trackCreatorLink.textContent.trim() : '';
+				
+				// Filtering logic remains the same
+				const composerMatch = (selectedComposer === 'all' || trackComposer === selectedComposer);
+				const creatorMatch = (selectedCreator === 'all' || trackCreator === selectedCreator);
+				
+				const isMatch = composerMatch && creatorMatch;
+				
+				track.classList.toggle('hidden-track', !isMatch);
+				
+				// 🆕 Increment the counter if the track is visible
+				if (isMatch) {
+					visibleTrackCount++;
+				}
+			});
+
+		   // --- End of applyFilters() function ---
+
+			// IMPORTANT: After filtering, re-select the first visible track and prepare the player
+			const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
+			
+			// 1. Clear any 'playing' class from all tracks
+			playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
+			
+			if (firstVisibleTrack) {
+				// 2. Set source and display without calling click() or play()
+				player.src = firstVisibleTrack.getAttribute('data-src');
+				player.pause(); // Ensure the player remains paused
+				firstVisibleTrack.classList.add('playing');
+				
+				const trackTitle = firstVisibleTrack.querySelector('.track-info').textContent.trim();
+				currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
+			} else {
+				// If no songs match the filter
+				player.pause();
+				player.src = '';
+				currentTrackDisplay.textContent = 'Now Playing: No songs match the filter.';
+			}
+		} // End of applyFilters() function
+
         function updateDescription(prefix) {
             const data = folderDescriptions[prefix];
             if (data) {
@@ -1590,17 +1794,27 @@
                 track.classList.toggle('hidden-track', !isMatch);
             });
             
-            // Re-select and play the first visible track
-            const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
-            if (firstVisibleTrack && !firstVisibleTrack.classList.contains('playing')) {
-                playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
-                firstVisibleTrack.click(); 
-                player.pause(); 
-            } else if (!firstVisibleTrack) {
-                player.pause();
-                player.src = '';
-                currentTrackDisplay.textContent = 'No songs in this folder.';
-            }
+		    // Find the first track that is NOT hidden
+			const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
+			
+			// Ensure all tracks are deselected
+			playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
+			
+			if (firstVisibleTrack) {
+				// Prepare the player without calling .click() or .play()
+				player.src = firstVisibleTrack.getAttribute('data-src');
+				player.pause(); // Ensure the player remains paused
+				firstVisibleTrack.classList.add('playing');
+				
+				// Update the display for the fixed player
+				const trackTitle = firstVisibleTrack.querySelector('.track-info').textContent.trim();
+				currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
+			} else {
+				// If no songs match (shouldn't happen here, but good practice)
+				player.pause();
+				player.src = '';
+				currentTrackDisplay.textContent = 'Now Playing: Select a track.';
+			}
         }
 		
         function getVisibleTracks() {
@@ -1727,19 +1941,43 @@
             track.addEventListener('click', handleTrackClick);
         });
 
-        folderButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                // Update button active state
-                folderButtons.forEach(btn => btn.classList.remove('active'));
-                event.currentTarget.classList.add('active');
-                
-                const prefix = event.currentTarget.getAttribute('data-prefix');
-                
-                updateDescription(prefix);
-                filterPlaylist(prefix);
-            });
-        });
-
+		folderButtons.forEach(button => {
+			button.addEventListener('click', (event) => {
+				// ... existing active class logic ...
+				
+				const prefix = event.currentTarget.getAttribute('data-prefix');
+				
+				// Show/hide filter section logic
+				filterSection.style.display = (prefix === 'AI/') ? 'block' : 'none';
+				
+				// Reset filters if leaving AI/ folder
+				if (prefix !== 'AI/') {
+					composerSelect.value = 'all';
+					creatorSelect.value = 'all';
+					// 🆕 CRITICAL: Reset the track count display to 0 when leaving AI/ folder
+					trackCountDisplay.textContent = '0'; 
+				}
+				
+				updateDescription(prefix);
+				filterPlaylist(prefix); 
+				
+				// --- THIS IS THE CRITICAL BLOCK ---
+				if (prefix === 'AI/') {
+					// 🆕 Call populateFilterOptions to get the total count
+					const totalCount = populateFilterOptions(); 
+					
+					// 🆕 Update the header display with the total count immediately
+					trackCountDisplay.textContent = totalCount;
+					
+					// 🆕 Now call applyFilters to handle the visibility based on filter selections (which defaults to 'all')
+					applyFilters(); 
+				}
+			});
+		});
+		// --- Filter Control Listeners ---
+		composerSelect.addEventListener('change', applyFilters);
+		creatorSelect.addEventListener('change', applyFilters);
+		
 		player.addEventListener('ended', () => {
 			// Only proceed if 'Play All' is checked
 			if (playAllSwitch.checked) {
@@ -1767,6 +2005,8 @@
 
 		setupExternalLinkListeners();
 		document.getElementById('btn-foldera').click();
+		
+		populateFilterOptions();	
 
 	</script>
 
