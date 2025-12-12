@@ -26,7 +26,7 @@
 	  "@type": "MusicPlaylist",
 	  "name": "Tuyển tập: 70 Năm Tình Ca Việt Nam và Nhạc AI Cover",
 	  "description": "Một bộ sưu tập cá nhân các bản nhạc Việt Nam, bao gồm chương trình kinh điển '70 Năm Tình Ca Việt Nam' từ SBS và các bản cover AI hiện đại.",
-	  "numTracks": 176, 
+	  "numTracks": 170, 
 	  "publisher": {
 		"@type": "Person",
 		"name": "anjou-sll"
@@ -243,6 +243,36 @@
 		padding-top:5px;
 		padding-right: 10px;
 		/* font-family: "Lucida Handwriting", cursive, sans-serif;*/
+	}
+	
+	/* --- Filter Header Styles --- */
+	#filter-header {
+		/* Use Flexbox to align items on one line */
+		display: flex;
+		justify-content: space-between;  /* Pushes the count to the left and button to the right */
+		align-items: center;
+		/* margin-top: 0; */
+	    /* margin-bottom: 5px; */
+		/* padding-right: 20px; */
+		color: #333;
+		font-size: 16px; /* Adjust size as needed to match the count text */
+	}
+
+	/* Style the Reset Button */
+	#reset-filter-btn {
+		padding: 5px 10px;
+		background-color: #007bff; /* Primary blue color */
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 14px;
+		transition: background-color 0.2s;
+		margin-right: 20px;
+	}
+
+	#reset-filter-btn:hover {
+		background-color: #0056b3;
 	}
  
 	/* --- Filter Section Styles --- */
@@ -505,10 +535,11 @@
     </div>
 
 	<div id="filter-section" style="display:none; margin-bottom: 20px;">
-		<h3>Tùy Chọn (<span id="track-count-display">0</span> tracks)</h3>
+		<h3 >Tùy Chọn (<span id="track-count-display"  >0</span>  bài) 
+			<button id="reset-filter-btn" style="margin-left: 0;" >Reset</button>
+		</h3>		
+	
 		<div id="filter-controls" style="display: flex; gap: 20px; align-items: center;">
-			<!-- 	<img id="filter-icon" src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/slidersForFilters.png" 
-			 alt="Filter Icon" style="width: 25px; height: 25px;"/> -->
 			<div>
 				<label for="composer-select">Sáng tác:</label>
 				<select id="composer-select" style="flex-grow: 1;">
@@ -1528,6 +1559,8 @@
 		const composerSelect = document.getElementById('composer-select');
 		const creatorSelect = document.getElementById('creator-select');	
 		const trackCountDisplay = document.getElementById('track-count-display');		
+		const resetButton = document.getElementById('reset-filter-btn');	
+		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'FolderC/'];		
         const folderDescriptions = {
             '70NamTinhCaVN/': {
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/HoaiNam.png?q=80&w=100&h=100&fit=contain&auto=format', 
@@ -1552,7 +1585,7 @@
             }
         };
 
-	function toggleScrollTopButton() {
+		function toggleScrollTopButton() {
 		// Determine the scroll threshold (e.g., 500 pixels down)
 		// window.scrollY is the current vertical scroll position
 		const scrollThreshold = 500; 
@@ -1603,15 +1636,12 @@
 		function populateFilterOptions() {
 			const composersMap = new Map();
 			const creatorsMap = new Map();
-			let totalFolderBTracks = 0; 
 
 			// 1. Calculate counts
 			tracks.forEach(track => {
 				const src = track.getAttribute('data-src');
 				
-				if (src.includes('AI/')) {
-					totalFolderBTracks++; // Keep this count for the filter header (80)
-					
+				if (src.includes('AI/')) {					
 					const trackInfo = track.querySelector('.folder-b-info');
 					if (trackInfo) {
 						// Composer (cell-middle)
@@ -1676,9 +1706,8 @@
 					selectElement.appendChild(option);
 				});
 			})(creatorSelect, creatorsMap, 'Tất Cả Người Trình Bày');
-			// 🆕 CRITICAL: Return the total count for use outside this function
-			return totalFolderBTracks;
 		}
+		
 		function applyFilters() {
 			const selectedComposer = composerSelect.value;
 			const selectedCreator = creatorSelect.value;
@@ -1715,8 +1744,6 @@
 				}
 			});
 
-		   // --- End of applyFilters() function ---
-
 			// IMPORTANT: After filtering, re-select the first visible track and prepare the player
 			const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
 			
@@ -1737,7 +1764,10 @@
 				player.src = '';
 				currentTrackDisplay.textContent = 'Now Playing: No songs match the filter.';
 			}
-		} // End of applyFilters() function
+			//console.log(`visibleTrackCount IN applyFilters()  is: ${visibleTrackCount}`);
+			// we update the filter header with the visible track counts every time we apply the filter
+			trackCountDisplay.textContent = visibleTrackCount;
+		} 
 
         function updateDescription(prefix) {
             const data = folderDescriptions[prefix];
@@ -1878,9 +1908,7 @@
 				prevTrackElement.click();
 			}
 		}
-		
-		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'FolderC/'];
-        
+		        
 		function handleTrackClick(event) {
 			// Stop Propagation Check (CRITICAL)
 			// Ignore clicks on the YouTube button OR the new link inside the track info
@@ -1933,6 +1961,15 @@
 			}	
         }
 			
+		function resetFilters() {
+			// 1. Reset both select boxes to the 'all' value
+			composerSelect.value = 'all';
+			creatorSelect.value = 'all';
+			
+			// 2. Run the filtering logic to update the tracklist and the header count
+			//trackCountDisplay.textContent = applyFilters();
+			applyFilters();
+		}
 
 		// --- Event Listeners ---
         
@@ -1963,15 +2000,10 @@
 				
 				// --- THIS IS THE CRITICAL BLOCK ---
 				if (prefix === 'AI/') {
-					// 🆕 Call populateFilterOptions to get the total count
-					const totalCount = populateFilterOptions(); 
-					
-					// 🆕 Update the header display with the total count immediately
-					trackCountDisplay.textContent = totalCount;
-					
-					// 🆕 Now call applyFilters to handle the visibility based on filter selections (which defaults to 'all')
+					populateFilterOptions(); 
 					applyFilters(); 
-				}
+					//console.log(`totalVisibleTracks in MAIN is: ${totalVisibleTracks}`);
+			}
 			});
 		});
 		// --- Filter Control Listeners ---
@@ -1997,8 +2029,11 @@
 				top: 0,
 				behavior: 'smooth' // Adds a smooth scrolling animation
 			});
-		});		
-
+		});	
+		
+		// Listener for the new Reset Button
+		resetButton.addEventListener('click', resetFilters);
+		
 		// --- Playback Control Listeners ---
 		document.getElementById('btn-next-track').addEventListener('click', playNextTrack);
 		document.getElementById('btn-previous-track').addEventListener('click', playPreviousTrack);	
