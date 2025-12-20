@@ -521,7 +521,7 @@
     <div id="folder-controls">
         <button class="folder-button" data-prefix="70NamTinhCaVN/" id="btn-foldera">70 Năm Tình Ca Việt Nam</button>
         <button class="folder-button" data-prefix="AI/" id="btn-folderb">Nhạc AI Cover</button>
-        <button class="folder-button" data-prefix="" id="btn-all">Show All</button>
+        <button class="folder-button" data-prefix="MyCollection/" id="btn-folderc" style="display: none;">Nhạc Sưu Tầm</button>
     </div>
 
     <div id="folder-description">
@@ -1776,6 +1776,16 @@
 	<!-- End of Statcounter Code -->
 
     <script>
+	
+		// Check if the URL contains "?mode=dev"
+		const urlParams = new URLSearchParams(window.location.search);
+		const isBetaTester = urlParams.get('mode') === 'dev';
+
+		if (isBetaTester) {
+			document.getElementById('btn-folderc').style.display = 'inline-block';
+			console.log("Welcome, Developer! Folder C is now active.");
+		}
+		
         const player = document.getElementById('audio-player');
         const playlist = document.getElementById('playlist');
         const tracks = playlist.querySelectorAll('li');
@@ -2279,5 +2289,4 @@
 	</script>
 
 </body>
-
 </html>
