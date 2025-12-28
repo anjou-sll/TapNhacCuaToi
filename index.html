@@ -245,6 +245,41 @@
 		/* font-family: "Lucida Handwriting", cursive, sans-serif;*/
 	}
 	
+	/* Folder C specific list item styling */
+	.folder-c-item {
+		padding: 10px 15px;
+		border-bottom: 1px solid #333; /* Matches your dark theme if you have one */
+		cursor: pointer;
+		display: flex;
+		flex-direction: column; /* Stack line 1 over line 2 */
+	}
+
+	/* Line 1: Full width title */
+	.info-title {
+		font-weight: bold;
+		font-size: 1.1em;
+		color: #fff; /* White or light color for visibility */
+		margin-bottom: 5px;
+	}
+
+	/* Line 2: Flexbox for split sections */
+	.info-meta {
+		display: flex;
+		justify-content: space-between; /* Pushes composer left, singer right */
+		font-size: 0.85em;
+		color: #bbb; /* Grey text for secondary info */
+	}
+
+	.composer-section {
+		font-style: italic;
+	}
+
+	.singer-section {
+		text-align: right;
+		font-weight: bold;
+	}
+
+	
 	/* --- Filter Header Styles --- */
 	#filter-header {
 		/* Use Flexbox to align items on one line */
@@ -521,7 +556,7 @@
     <div id="folder-controls">
         <button class="folder-button" data-prefix="70NamTinhCaVN/" id="btn-foldera">70 Năm Tình Ca Việt Nam</button>
         <button class="folder-button" data-prefix="AI/" id="btn-folderb">Nhạc AI Cover</button>
-        <button class="folder-button" data-prefix="MyCollection/" id="btn-folderc" style="display: none;">Nhạc Sưu Tầm</button>
+        <button class="folder-button" data-prefix="MyCollection/" id="btn-folderc" style="display: none;" onclick="loadFolderC()">Nhạc Sưu Tầm</button>
     </div>
 
     <div id="folder-description">
@@ -1610,8 +1645,8 @@
 				<span class="info-cell cell-top">PHÔI PHA</span>
 				<span class="info-cell cell-middle">Trịnh Công Sơn</span>
 				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@minhhainguyen8557/videos' target='_blank'>Minhhai Nguyen  </a></span>	</span> 			
-            <button class="youtube-link" data-yt-url="https://youtu.be/JDMtb5i5oVY" data-prefix="AI/">
-				<img src="https://img.youtube.com/vi/JDMtb5i5oVY/default.jpg" alt="YouTube Thumbnail"> 
+            <!--button class="youtube-link" data-yt-url="https://youtu.be/JDMtb5i5oVY" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/JDMtb5i5oVY/default.jpg" alt="YouTube Thumbnail"--> 
 				<span class="yt-text">Xem Video</span> </button> </li>	
 
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/PHUTCUOI-LamPhuong-MusicBoxCover.mp3">
@@ -1936,7 +1971,9 @@
 		const creatorSelect = document.getElementById('creator-select');	
 		const trackCountDisplay = document.getElementById('track-count-display');		
 		const resetButton = document.getElementById('reset-filter-btn');	
-		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'FolderC/'];		
+		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'MyCollection/'];		
+		const FOLDER_C_API = "https://music-playlist-api.pham-h-hai.workers.dev";
+
         const folderDescriptions = {
             '70NamTinhCaVN/': {
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/HoaiNam.png?q=80&w=100&h=100&fit=contain&auto=format', 
@@ -2346,6 +2383,62 @@
 			//trackCountDisplay.textContent = applyFilters();
 			applyFilters();
 		}
+
+
+		// 1. Initial Secret Mode Check
+		//const urlParams = new URLSearchParams(window.location.search);
+		//const isDev = true;
+       //		urlParams.get('mode') === 'dev';
+
+		//if (isDev) {
+		//	const btnC = document.getElementById('btn-folderc'); // Assuming this is your button ID
+		//	if(btnC) btnC.style.display = 'inline-block';
+		//}
+
+		// 2. Function to fetch and build Folder C
+		async function loadFolderC() {
+			const playlistUl = document.getElementById('playlist');
+			console.log("In loadFolderC function");
+			// Optional: Clear or show loading
+			playlistUl.innerHTML = "<li>Loading Playlist...</li>";
+
+			try {
+				const response = await fetch(FOLDER_C_API);
+				const tracks = await response.json();
+
+				// Clear the current list
+				playlistUl.innerHTML = "";
+
+				tracks.forEach(track => {
+					const li = document.createElement('li');
+					li.setAttribute('data-src', track.url);
+					li.className = 'folder-c-item';
+
+					// Build the two-line structure
+					li.innerHTML = `
+						<div class="info-title">${track.title}</div>
+						<div class="info-meta">
+							<span class="composer-section">Sáng tác: ${track.composer}</span>
+							<span class="singer-section">Trình bày: ${track.singer}</span>
+						</div>
+					`;
+
+					// Re-attach your existing click/play logic
+					li.addEventListener('click', function() {
+						// If your existing player has a specific function, call it here
+						// Example: playAudio(this.dataset.src, track.title);
+						console.log("Playing:", track.title);
+					});
+
+					playlistUl.appendChild(li);
+				});
+
+			} catch (error) {
+				console.error("Failed to load Folder C:", error);
+				playlistUl.innerHTML = "<li>Error loading playlist.</li>";
+			}
+		}
+
 
 		// --- Event Listeners ---
         
