@@ -3222,12 +3222,8 @@
 					`;
 
 					// Re-attach your existing click/play logic
-					li.addEventListener('click', function() {
-						// If your existing player has a specific function, call it here
-						// Example: playAudio(this.dataset.src, track.title);
-						console.log("Playing:", track.title);
-					});
-
+					li.addEventListener('click', handleTrackClick); 
+					console.log("Playing:", track.title);				
 					playlistUl.appendChild(li);
 				});
 
@@ -3314,3 +3310,4 @@
 
 </body>
 </html>
+
