@@ -262,34 +262,46 @@
 		cursor: pointer;
 		display: flex;
 		flex-direction: column; /* Stack line 1 over line 2 */
+		width: 100%;
+		padding: 12px 15px;				
+		/* align-items: flex-start */
+		box-sizing: border-box; /* Ensures padding doesn't cause overflow */
 	}
 
 	/* Line 1: Full width title */
 	.info-title {
 		font-weight: bold;
 		font-size: 1.1em;
-		color: #333; /* White or light color for visibility */
+		color: #333; 
 		margin-bottom: 5px;
+		text-align: left;
 	}
 
-	/* Line 2: Flexbox for split sections */
-	.info-meta {
-		display: flex;
-		justify-content: space-between; /* Pushes composer left, singer right */
-		font-size: 0.85em;
-		color: #bbb; /* Grey text for secondary info */
-	}
 
-	.composer-section {
-		font-style: italic;
+	.folder_c_song_title{
+		font-weight: bold; 
+		font-size: 1.1em; 
+		color: #333;  
+		text-align: left; 
+		width:100%; 
+		margin: auto;
 	}
-
-	.singer-section {
-		text-align: right;
+	.folder_c_meta_info{
+		font-style:italic; 
+		font-size: 0.9em; 
+		width:100%;
+		padding-top: 1px;
+		text-align: right;		
+	}
+	.folder_c_composer{
+		display:block;
+		font-family: 'Lucida Handwriting','Segoe Script', cursive;
+	}
+	.folder_c_singer{
+		display:block;
 		font-weight: bold;
 	}
 
-	
 	/* --- Filter Header Styles --- */
 	#filter-header {
 		/* Use Flexbox to align items on one line */
@@ -3082,11 +3094,13 @@
 		}
 		
         function filterPlaylist(prefix) {
+			console.log(`filterPlaylist is called`);
 			// 🔴 Change: Query the playlist LIVE so we see the currently visible items
 			const liveTracks = playlist.querySelectorAll('li');
-			
+			console.log(`prefix is filterPlaylist is: ${prefix}`);
 			liveTracks.forEach(track => {
 				const src = track.getAttribute('data-src');
+				console.log(`src is filterPlaylist is: ${src}`);
 				const isMatch = prefix === "" || src.includes(prefix);
 				track.classList.toggle('hidden-track', !isMatch);
 			});
@@ -3185,7 +3199,7 @@
 				event.target.closest('.external-link')) {
 				return; 
 			}
-			
+
 			// 2. Identify all tracks and remove 'playing' highlight
 			const allTracks = document.querySelectorAll('#playlist li');
 			allTracks.forEach(t => t.classList.remove('playing'));
@@ -3197,10 +3211,9 @@
 
 			// 3. Logic to get the Title for Folder A, B, or C
 			let trackTitle = '';
-			const folderCTitle = clickedTrack.querySelector('.info-title'); // For Folder C
+			const folderCTitle = clickedTrack.querySelector('.folder_c_song_title'); // For Folder C
 			const folderBTitle = clickedTrack.querySelector('.cell-top');   // For Folder B
 			const trackInfo = clickedTrack.querySelector('.track-info');    // For Folder A
-
 			if (folderCTitle) {
 				trackTitle = folderCTitle.textContent;
 			} else if (folderBTitle) {
@@ -3267,17 +3280,14 @@
 				tracks.forEach(track => {
 					const li = document.createElement('li');
 					li.setAttribute('data-src', track.url);
-					li.className = 'folder-c-item';
-
-					// Build the two-line structure
-					li.innerHTML = `
-						<div class="info-title">${track.title}</div>
-						<div class="info-meta">
-							<span class="composer-section">Tác giả: ${track.composer}</span>
-							<span class="singer-section">  Ca sĩ: ${track.singer}</span>
-						</div>
-					`;
-
+					console.log(`track.url In loadFolderC is : ${track.url}`);
+					li.innerHTML = `					
+						<div class="folder_c_song_title">${track.title}</div>
+							<div class="folder_c_meta_info">
+								<span class="folder_c_composer">${track.composer}</span>  
+								<span class="folder_c_singer">${track.singer}</span>
+							</div>
+					`
 					// Re-attach your existing click/play logic
 					li.addEventListener('click', handleTrackClick); 
 					console.log("Playing:", track.title);
@@ -3325,8 +3335,9 @@
 					// 🆕 CRITICAL: Reset the track count display to 0 when leaving AI/ folder
 					trackCountDisplay.textContent = '0'; 
 				}
-					
+				console.log(`prefix in buttons: ${prefix}`);
 				updateDescription(prefix);
+				console.log(`filterPlaylist is about to be called with prefix ${prefix}`);
 				filterPlaylist(prefix); 
 					
 				if (prefix === 'AI/') {
