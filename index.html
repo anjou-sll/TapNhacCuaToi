@@ -1899,7 +1899,7 @@
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=dk48VUqaxzI" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/dk48VUqaxzI/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li>
- 
+ <!--
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MuaNgau-ThanhTung-dnPham.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">MƯA NGÂU</span>
@@ -1908,7 +1908,7 @@
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=yHawTZlr9Pk" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/yHawTZlr9Pk/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li>	 
-
+-->
 		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MuaNgau-ThanhTung-Ruby.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">MƯA NGÂU</span>
@@ -2443,7 +2443,7 @@
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/SAYMOTDOIVIEM-KenQuach_HuongMyB%C3%B4ng-KenQuachOfficial.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">SAY MỘT ĐỜI VÌ EM</span>
-				<span class="info-cell cell-middle">Ken Quách & HuongMyBông ©</span>
+				<span class="info-cell cell-middle">Ken Quách ? & HuongMyBông © ?</span>
 				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@KenQ_Musik/videos' target='_blank'>Ken Quach Official</a> </span>	</span>				
             <button class="youtube-link" data-yt-url="" data-prefix="AI/">
 				<!--img src="https://img.youtube.com/vi/fUu2KrYRqJg/default.jpg" alt="YouTube Thumbnail"--> 
@@ -3260,7 +3260,7 @@
 			console.log(`prefix is filterPlaylist is: ${prefix}`);
 			liveTracks.forEach(track => {
 				const src = track.getAttribute('data-src');				
-				const isMatch = prefix === "" || src.includes(prefix);
+				const isMatch = src && (prefix === "" || src.includes(prefix));
 				track.classList.toggle('hidden-track', !isMatch);
 			});
             
@@ -3378,7 +3378,8 @@
 			} else if (folderBTitle) {
 				trackTitle = folderBTitle.textContent;
 			} else if (trackInfo) {
-				trackTitle = trackInfo.textContent;
+				// If it's Folder A, we strip out any extra text from "Read more" links
+				trackTitle = trackInfo.textContent.replace('Đọc thêm ...', '').trim();
 			}
 
 			currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
@@ -3542,4 +3543,5 @@
 
 </body>
 </html>
+
 
