@@ -215,6 +215,7 @@
 		display: block;
 		pointer-events: none;
 		flex-grow: 1;
+		padding: 1px 1px;
 	}
 	/* Ensure links inside folder-b-info are clickable */
 	.folder-b-info a {
@@ -227,7 +228,7 @@
 	/* Folder B Cell Styling - Ensure cells are on their own line universally */
 	.info-cell {
 		display: block;
-		/* padding: 2px 0;   Minimal top/bottom padding for standard size */
+		padding: 0px 0px; /*  Minimal top/bottom padding for standard size */
 		flex-basis: auto;
 		overflow: visible; /* hidden; */
 		white-space: normal ; /*nowrap;  Ensures cell text stays on one line on desktop */
@@ -243,29 +244,21 @@
 	.folder-b-info .cell-middle {
 		font-size: 16px;
 		font-style: italic;
-		padding: 2px 0px;
+		padding-left: 25px;
+		/* padding: 2px 25px; */
 		font-family:  "bradley hand", cursive; /*"Lucida Handwriting", cursive, sans-serif;*/
 	}
 	.folder-b-info .cell-bottom {
 		font-size: 16px;
 		color: #555;
 		text-align: right;
-		padding-top:5px;
+		padding-top:3px;
 		padding-right: 10px;
 		/* font-family: "Lucida Handwriting", cursive, sans-serif;*/
 	}
 	
 	/* Folder C specific list item styling */
 	.folder-c-item {
-		padding: 10px 15px;
-		border-bottom: 1px solid #333; /* Matches your dark theme if you have one */
-		cursor: pointer;
-		display: flex;
-		flex-direction: column; /* Stack line 1 over line 2 */
-		width: 100%;
-		padding: 12px 15px;				
-		/* align-items: flex-start */
-		box-sizing: border-box; /* Ensures padding doesn't cause overflow */
 	}
 
 	/* Line 1: Full width title */
@@ -301,7 +294,25 @@
 		display:block;
 		font-weight: bold;
 	}
+	.fav-heart {
+		cursor: pointer;
+		margin-right: 8px;
+		color: #222; /* Grey by default */
+		font-size: 1.5em; 
+		transition: color 0.3s ease;
+		pointer-events: auto; /* IMPORTANT: Allows clicking even if inside pointer-events:none parent */
+	}
 
+	.fav-heart.active {
+		color: #ff4d4d !important; /* Red when liked */
+	}
+
+/* 	Ensure the layout doesn't break */
+/* 	.info-title, .track-info {		*/
+/*		display: flex;				*/
+/*		align-items: center;		*/
+/*	}								*/	
+	
 	/* --- Filter Header Styles --- */
 	#filter-header {
 		/* Use Flexbox to align items on one line */
@@ -365,17 +376,7 @@
 		font-size: 14px;
 	}
 
-	/* Mobile Adjustments (within @media (max-width: 400px)) */
-	@media (max-width: 400px) {
-		#filter-controls {
-			flex-direction: column; /* Stack controls vertically */
-			align-items: flex-start;
-			gap: 5px;
-		}
-		#filter-controls select {
-			width: 100%; /* Make dropdowns full width on mobile */
-		}
-	}
+}
  
     /* End of Playback/List Styling */
     #playlist li:last-child { border-bottom: none; }
@@ -386,19 +387,20 @@
     .youtube-link { 
         flex-shrink: 0; background: none; border: 1px solid #ccc; border-radius: 4px; 
         /* UPDATED: Reduced vertical padding for tighter fit */
-        padding: 3px 3px; 
+        padding: 3px 1px; 
         cursor: pointer; 
         display: flex; 
         flex-direction: column; /* Universal vertical stack */
         align-items: center; 
         pointer-events: auto; 
         text-align: center;
+		width: 80px;
     }
     .youtube-link:hover { background-color: #ffe8e8; border-color: #ff0000; }
     .youtube-link img { 
         /* UPDATED: Maximize thumbnail size */
-        width: 65px; 
-        height: 45px; 
+        width: 75px; 
+        height: auto; 
         object-fit: cover; border-radius: 2px; 
         /* UPDATED: Reduced margin below image */
         margin: 0 auto 1px auto; 
@@ -463,6 +465,15 @@
     /* ========================================================================= */
 
     @media (max-width: 400px) { 
+	
+		#filter-controls {
+			flex-direction: column; /* Stack controls vertically */
+			align-items: flex-start;
+			gap: 5px;
+		}
+		#filter-controls select {
+			width: 100%; /* Make dropdowns full width on mobile */
+		}
         /* Base and Control Stacking (Unchanged) */
         .folder-button { flex-basis: 100% !important; }
 		
@@ -519,20 +530,22 @@
 				font-style: italic !important; 
 				text-align: left !important; 
 				font-size: 13px !important;
-				padding-bottom: 2px !important;
+				padding-left: 25px;
+				/* padding-bottom: 2px !important; */
 			}
 			
 		    .cell-bottom { 
 		        font-size: 13px !important; 
 		        color: #555 !important; 
 		        text-align: right !important;
-				padding-top: 10px !important;
+				/* padding-top: 10px !important; */
 				padding-right: 10px !important;
-				padding-bottom: 0 !important; /* Increases bottom spacing */
+				margin-bottom: 0px !important;  /*Increases bottom spacing */
 		    }
 			.cell-bottom a {
 				color: #007bff !important;
 				font-weight: normal !important;
+				margin-bottom: 30px;
 			}
         
 			/* YouTube Button structure remains tight */
@@ -540,7 +553,7 @@
 			        height: 100% !important; 
 			        justify-content: center !important; 
 			        flex-shrink: 0 !important; 
-			        padding: 2px !important; 
+			   /*     padding: 2px !important; */ 
 			        min-width: 50px !important;
 			        box-sizing: border-box !important; 
 			    }
@@ -579,6 +592,7 @@
         <button class="folder-button" data-prefix="70NamTinhCaVN/" id="btn-foldera">70 Năm Tình Ca Việt Nam</button>
         <button class="folder-button" data-prefix="AI/" id="btn-folderb">Nhạc AI Cover</button>
         <button class="folder-button" data-prefix="MyCollection/" id="btn-folderc" style="display: none;" onclick="loadFolderC()">Nhạc Sưu Tầm</button>
+		<button class="folder-button" id="btn-favorites" data-prefix="FAVORITES/">  <span style="color: #ff4d4d;">♥</span> Yêu Thích</button>
     </div>
 
     <div id="folder-description">
@@ -844,23 +858,17 @@
 	</div>
     <! folder B tracks list >
 	<div> 
-		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ANHTRANGNOIHOLONGTOI-NhacHoa_lvDinhCongMinh_TrucPhuong-GocAcoustic.mp3">
-			<span class="track-info folder-b-info">
-				<span class="info-cell cell-top">ÁNH TRĂNG NÓI HỘ LÒNG TÔI</span>
-				<span class="info-cell cell-middle">Nhạc NQ, lv: Đinh Công Minh & Trúc Phương</span>
-				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@gocacoustic/videos' target='_blank'>Góc Acoustic   </a> </span>	</span>			
-			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=hHHyW26ThQw" data-prefix="AI/">
-				<img src="https://img.youtube.com/vi/hHHyW26ThQw/default.jpg" alt="YouTube Thumbnail"> 
-				<span class="yt-text">Xem Video</span> </button> </li>
-
 		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/AiDiNgoaiSuongGio-NguyenHuuThiet-Emsoundscape.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">AI ĐI NGOÀI SƯƠNG GIÓ</span>
 				<span class="info-cell cell-middle">Nguyễn Hữu Thiết</span>
-				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@emsoundscape/videos' target='_blank'>EmSoundscape</a> </span>	</span>			
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@emsoundscape/videos' target='_blank'>EmSoundscape</a> </span>	
+			</span>			
 			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=Lfzr_ZF9xg4" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/Lfzr_ZF9xg4/default.jpg" alt="YouTube Thumbnail"> 
-				<span class="yt-text">Xem Video</span> </button> </li>
+				<span class="yt-text">Xem Video</span> 
+			</button> 
+		</li>
 
 		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/AiDuaEmVe-NguyenAnh9-HieuThaoOffical.mp3">
 			<span class="track-info folder-b-info">
@@ -878,6 +886,15 @@
 				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@aikbc/videos' target='_blank'>AI KBC Cover  </a> </span>	</span>			
 			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=5k4gWVgMvPY" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/5k4gWVgMvPY/default.jpg" alt="YouTube Thumbnail"> 
+				<span class="yt-text">Xem Video</span> </button> </li>
+
+		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ANHTRANGNOIHOLONGTOI-NhacHoa_lvDinhCongMinh_TrucPhuong-GocAcoustic.mp3">
+			<span class="track-info folder-b-info">
+				<span class="info-cell cell-top">ÁNH TRĂNG NÓI HỘ LÒNG TÔI</span>
+				<span class="info-cell cell-middle">Nhạc NQ, lv Đinh Công Minh & Trúc Phương</span>
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@gocacoustic/videos' target='_blank'>Góc Acoustic   </a> </span>	</span>			
+			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=hHHyW26ThQw" data-prefix="AI/">
+				<img src="https://img.youtube.com/vi/hHHyW26ThQw/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li>
 								
 		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/BaiCuoiChoNguoiTinh-NguyenVu-CaNhacViet.mp3">
@@ -1221,7 +1238,6 @@
 			<button class="youtube-link" data-yt-url="https://youtu.be/Dy-4H8TKzK8"  data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/Dy-4H8TKzK8/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li>					
-
 				
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/DIVANG-TrinhNamSon-MusicBoxCover.mp3">				
 			<span class="track-info folder-b-info">
@@ -1732,7 +1748,7 @@
  
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/KhucHatThanhXuan-NhacNQlvPhamDuy-SweetMelodyGS.mp3">
 			<span class="track-info folder-b-info">
-				<span class="info-cell cell-top">KHÚC HÁT THANH XUÂN (WHEN WE WERE YOUNG)</span>
+				<span class="info-cell cell-top">KHÚC HÁT THANH XUÂN</span>
 				<span class="info-cell cell-middle">Nhạc NQ, lv Phạm Duy</span>
 				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@sweetmelodygs/videos' target='_blank'>SweetMelodyGS</a> </span>	</span>			
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=GlHMtKLlQ2E&t=225s" data-prefix="AI/">
@@ -2674,7 +2690,6 @@
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=p9K9nzZAtfs" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/p9K9nzZAtfs/default.jpg" alt="YouTube Thumbnail"> 
 				<span class="yt-text">Xem Video</span> </button> </li> 
-				<span class="yt-text">Xem Video</span> </button> </li> 
 
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/ThuongHoaiNganNam-PhamManhCuong-NguoiCuRadio.mp3">
 			<span class="track-info folder-b-info">
@@ -3117,8 +3132,7 @@
 				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@nhacvietAI-o9d/videos' target='_blank'>Nhạc Việt AI</a> </span>	</span>					
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=PIPB2ih0_AU" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/PIPB2ih0_AU/default.jpg" alt="YouTube Thumbnail"> 
-				<span class="yt-text">Xem Video</span> </button> </li>  	
-				
+				<span class="yt-text">Xem Video</span> </button> </li>  					
 	</div>					
     </ul>
 
@@ -3141,7 +3155,49 @@
 	<!-- End of Statcounter Code -->
 
     <script>
-	
+		function injectHeartsToStaticTracks() {
+			const staticTracks = document.querySelectorAll('#playlist li:not(.folder-c-item)');
+			staticTracks.forEach(li => {
+				const src = li.getAttribute('data-src');
+				// do not create heart symbol on already favorited track, or on track on folder A  
+				if (!li.querySelector('.fav-heart') && !src.includes('70NamTinhCaVN/')){
+					const heart = document.createElement('span');	
+					heart.className = `fav-heart ${isFavorite(src) ? 'active' : ''}`;							
+					heart.innerHTML = '♥';
+					heart.onclick = (e) => toggleFavorite(e, src);						
+					// Insert at the beginning of the title span
+					const titleSpan = li.querySelector('.cell-top');
+					if (titleSpan) titleSpan.prepend(heart);
+					//divElement.appendChild(spanElement);
+				}				
+			});
+		}	
+		
+		// Load favorites from memory, or start with an empty list
+		let favorites = JSON.parse(localStorage.getItem('myMusicFavs')) || [];
+		let cachedFolderCData = []; // This will store Nhạc Sưu Tầm tracks
+		
+		function toggleFavorite(event, trackSrc) {
+			
+			event.stopPropagation(); // Prevents the song from playing when you click the heart
+			const heartBtn = event.currentTarget;
+			const index = favorites.indexOf(trackSrc);
+			if (index > -1) {
+				favorites.splice(index, 1); // Remove if already liked
+				heartBtn.classList.remove('active');
+			} else {
+				favorites.push(trackSrc); // Add to favorites
+				heartBtn.classList.add('active');
+			}		
+			// Save to browser memory
+			localStorage.setItem('myMusicFavs', JSON.stringify(favorites));
+		}	
+		
+		// Function to check if a track is favorited (used when rendering)
+		function isFavorite(src) {
+			return favorites.includes(src);
+		}
+
 		let originalPlaylistHTML = ""; // This will hold Folders A and B	
 		// Check if the URL contains "?mode=dev"
 		const urlParams = new URLSearchParams(window.location.search);
@@ -3156,6 +3212,7 @@
         const playlist = document.getElementById('playlist');
         const tracks = playlist.querySelectorAll('li');
         const currentTrackDisplay = document.getElementById('current-track');
+		const folderDesciptionBox = document.getElementById('folder-description');
         const folderButtons = document.querySelectorAll('.folder-button');
         const folderImage = document.getElementById('folder-image');
         const folderText = document.getElementById('folder-text');
@@ -3191,13 +3248,21 @@
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/CodingWorkFromHomeGIFbyPersona.gif',
                 description: 'Nhạc sưu tầm ...', 
                 alt: '', 
-                link: '#',
+                link: '',
+                linkText: ''
+            },
+            'FAVORITES/': { 
+                image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/CodingWorkFromHomeGIFbyPersona.gif',
+                description: 'Danh sách những bản nhạc bạn yêu thích nhất.', 
+                alt: 'Yêu Thích', 
+                link: '',
                 linkText: ''
             }
         };
 
 		// Save the static tracks (A & B) right away
 		originalPlaylistHTML = document.getElementById('playlist').innerHTML;
+		injectHeartsToStaticTracks();
 
 		function toggleScrollTopButton() {
 		// Determine the scroll threshold (e.g., 500 pixels down)
@@ -3377,14 +3442,24 @@
 
 			trackCountDisplay.textContent = visibleTrackCount;
 		}
-
+		
+		function refreshHeartIcons() {
+			const liveTracks = playlist.querySelectorAll('li');
+			liveTracks.forEach(track => {
+				const src = track.getAttribute('data-src');
+				const heart = track.querySelector('.fav-heart');
+				if (heart && favorites.includes(src)) {
+					heart.classList.add('active');
+				}
+			});
+		}
+		
         function updateDescription(prefix) {
             const data = folderDescriptions[prefix];
             if (data) {
                 folderImage.src = data.image;
-                folderImage.alt = data.alt;
+                folderImage.alt = data.alt;				
                 folderText.innerHTML = data.description;
-			
 				// apply truncation class and reset link behavior
 				folderText.classList.add('truncate');
 				folderText.classList.remove('expanded');
@@ -3392,7 +3467,6 @@
 				folderLink.href = '#';
 				folderLink.textContent = data.linkText;
 				folderLink.style.display = 'block';
-
 				// IMPORTANT: Remove any old listeners and add the new toggle listener
 				folderLink.removeEventListener('click', handleFolderATrackLink);
 				folderLink.addEventListener('click', handleFolderBDescriptionToggle);
@@ -3404,6 +3478,7 @@
                 folderText.textContent = ''; 
                 folderLink.style.display = 'none';
             }
+			refreshHeartIcons();
         }
 
 		function handleFolderBDescriptionToggle(event) {
@@ -3427,10 +3502,8 @@
 		}
 		
         function filterPlaylist(prefix) {
-			console.log(`filterPlaylist is called`);
 			// 🔴 Change: Query the playlist LIVE so we see the currently visible items
-			const liveTracks = playlist.querySelectorAll('li');
-			console.log(`prefix is filterPlaylist is: ${prefix}`);
+			const liveTracks = playlist.querySelectorAll('li');		
 			liveTracks.forEach(track => {
 				const src = track.getAttribute('data-src');				
 				const isMatch = src && (prefix === "" || src.includes(prefix));
@@ -3527,8 +3600,9 @@
 		function handleTrackClick(event) {
 			// 1. Stop Propagation Check
 			if (event.target.closest('.youtube-link') || 
-				event.target.closest('.folder-b-info a') || 
-				event.target.closest('.external-link')) {
+			    event.target.closest('.folder-b-info a') || 
+				event.target.closest('.external-link') ||	
+				event.target.closest('.fav-heart')) { 
 				return; 
 			}
 
@@ -3567,11 +3641,9 @@
 			if (isRestricted) {
 				// If the file belongs to Folder B OR Folder C, disable the download option
 				player.setAttribute('controlsList', 'nodownload');
-				console.log(`Download restricted for file in: ${source}`);
 			} else {
 				// For all other folders/files (e.g., Folder A, Show All), enable the download option
 				player.removeAttribute('controlsList');
-				console.log("Download enabled.");
 			}	
         }
 			
@@ -3581,49 +3653,51 @@
 			creatorSelect.value = 'all';
 			
 			// 2. Run the filtering logic to update the tracklist and the header count
-			//trackCountDisplay.textContent = applyFilters();
 			applyFilters();
 		}
 
 		// 2. Function to fetch and build Folder C
 		async function loadFolderC() {
 			const playlistUl = document.getElementById('playlist');
-			console.log("In loadFolderC function");
 			// Optional: Clear or show loading
 			playlistUl.innerHTML = "<li>Loading Playlist...</li>";
 
 			try {
 				const response = await fetch(FOLDER_C_API);
 				const tracks = await response.json();
+				cachedFolderCData = tracks; // 🟢 NEW: Save tracks to the cache
 
 				// Clear the current list
 				playlistUl.innerHTML = "";
 
 				tracks.forEach(track => {
 					const li = document.createElement('li');
+					li.className = 'folder-c-item';
 					li.setAttribute('data-src', track.url);
 					
+					// Check if this track is already a favorite
+					const isFavClass = favorites.includes(track.url) ? 'active' : '';
+					
 					li.innerHTML = `					
-						<div class="folder_c_song_title">${track.title}</div>
-							<div class="folder_c_meta_info">
-								<span class="folder_c_composer">${track.composer}</span>  
-								<span class="folder_c_singer">${track.singer}</span>
-							</div>
-					`
+						<div class="folder_c_song_title"> 
+							<span class="fav-heart ${isFavClass}" onclick="toggleFavorite(event, '${track.url}')">♥</span>
+							${track.title}
+						</div>
+						<div class="folder_c_meta_info">
+							<span class="folder_c_composer">${track.composer}</span>  
+							<span class="folder_c_singer">${track.singer}</span>
+						</div>
+					`;
 					// Re-attach your existing click/play logic
 					li.addEventListener('click', handleTrackClick); 
-					
-					
-
-					playlistUl.appendChild(li);
+					playlistUl.appendChild(li);				
 				});
-
+			
 			} catch (error) {
 				console.error("Failed to load Folder C:", error);
 				playlistUl.innerHTML = "<li>Error loading playlist.</li>";
 			}
 		}
-
 
 		// --- Event Listeners ---
         
@@ -3635,43 +3709,68 @@
 		folderButtons.forEach(button => {
 			button.addEventListener('click', (event) => {
 				const prefix = event.currentTarget.getAttribute('data-prefix');
-
-				// NEW: If switching back to A or B, restore the original tracks first
-				if (prefix === '70NamTinhCaVN/' || prefix === 'AI/') {
+				if (prefix === 'FAVORITES/') {
+					folderDesciptionBox.style.display= 'none';
+				} else {
+					folderDesciptionBox.style.display= 'block';
+				}
+				// 1. Restore A & B if we were in Folder C (or switching to Favorites)
+				if (prefix === 'FAVORITES/' || prefix === '70NamTinhCaVN/' || prefix === 'AI/') {
 					playlist.innerHTML = originalPlaylistHTML;
-					// 🔴 CRITICAL: Re-attach the click listeners to the restored tracks
+					// 🔴 CRITICAL: Re-inject hearts and re-attach play listeners
+					injectHeartsToStaticTracks(); 
 					document.querySelectorAll('#playlist li').forEach(li => {
 						li.addEventListener('click', handleTrackClick);
 					});
-					// Re-attach YouTube/External Link listeners
 					setupExternalLinkListeners();
 				}
-			
-				// Show/hide filter section logic
-				filterSection.style.display = (prefix === 'AI/') ? 'block' : 'none';
-					
-				// Reset filters if leaving AI/ folder
-				if (prefix !== 'AI/') {
-					composerSelect.value = 'all';
-					creatorSelect.value = 'all';
-					// 🆕 CRITICAL: Reset the track count display to 0 when leaving AI/ folder
-					trackCountDisplay.textContent = '0'; 
+
+				// 2. Handle Favorites Filtering
+				if (prefix === 'FAVORITES/') {
+					filterSection.style.display = 'none';				
+
+					// 🟢 Add favorited tracks from Folder C back into the list
+					cachedFolderCData.forEach(track => {
+						if (favorites.includes(track.url)) {
+							const li = document.createElement('li');
+							li.className = 'folder-c-item';
+							li.setAttribute('data-src', track.url);
+							li.innerHTML = `					
+								<div class="folder_c_song_title"> 
+									<span class="fav-heart active" onclick="toggleFavorite(event, '${track.url}')">♥</span>
+									${track.title}
+								</div>
+								<div class="folder_c_meta_info">
+									<span class="folder_c_composer">${track.composer}</span>  
+									<span class="folder_c_singer">${track.singer}</span>
+								</div>
+							`;
+							li.addEventListener('click', handleTrackClick);
+							playlist.appendChild(li);
+						}
+					});
+
+					// Now scan the list (which now includes A, B, and the C tracks we just added)
+					const liveTracks = playlist.querySelectorAll('li');
+					liveTracks.forEach(track => {
+						const src = track.getAttribute('data-src');
+						const isFav = favorites.includes(src);
+						track.classList.toggle('hidden-track', !isFav); 
+					});
+					updateDescription(prefix);
 				}
-				console.log(`prefix in buttons: ${prefix}`);
-				updateDescription(prefix);
-				console.log(`filterPlaylist is about to be called with prefix ${prefix}`);
-				filterPlaylist(prefix); 
+				else 	{		
+					// 3. Normal Folder Logic
+					updateDescription(prefix);
+					filterPlaylist(prefix); 
 					
-				if (prefix === 'AI/') {
-					filterSection.style.display = 'block';
-					
-					// 1. Re-scan the restored tracks to fill the dropdown menus
-					populateFilterOptions(); 
-					
-					// 2. Ensure the tracks are filtered based on whatever is currently selected
-					applyFilters(); 
-				} else {
-					filterSection.style.display = 'none';
+					if (prefix === 'AI/') {
+						filterSection.style.display = 'block';
+						populateFilterOptions(); 
+						applyFilters(); 
+					} else {
+						filterSection.style.display = 'none';
+					}
 				}
 			});
 		});
@@ -3716,6 +3815,3 @@
 
 </body>
 </html>
-
-
-
