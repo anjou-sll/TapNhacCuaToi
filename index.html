@@ -68,9 +68,7 @@
 		visibility: visible; }
 		
     #current-track { margin-bottom: 15px; font-style: italic; color: #555; text-align: center; padding: 5px 0; }
-
-	/*  🔴--- FIXED FOOTER STYLES🔴 --- */
-
+	
 	#fixed-player-wrapper {
 		position: fixed;
 		bottom: 0;
@@ -161,7 +159,8 @@
         border-radius: 5px; background-color: #fff; color: #007bff; cursor: pointer;
         font-size: 14px; transition: background-color 0.2s, color 0.2s;
     }
-    .folder-button.active, .folder-button:hover { background-color: #007bff; color: white; border-color: #0056b3; }
+    .folder-button:hover { background-color: #c1dff7; color: #252d33; border-color: #0056b3; } 
+	.folder-button.active  { background-color: #007bff; color: white; border-color: #0056b3; }
 	
 	.truncate {
 		/* Limit the height to approximately two lines of text (16px font-size * 1.5 line-height * 2 lines) */
@@ -170,7 +169,7 @@
 		position: relative; /* Needed for absolute positioning of potential fade effect (if added later) */
 		transition: max-height 0.3s ease-out;
 	}
-	/* 🆕 NEW: Fade Effect for Truncated Text */
+	/* Fade Effect for Truncated Text */
 	.truncate::after {
 		content: "";
 		position: absolute;
@@ -187,8 +186,9 @@
 	.expanded {
 		max-height: 780px !important; /* Large height to show all content */
 		overflow: visible !important;
-	}	
-	/* 🆕 NEW: Remove fade effect when expanded */
+	}
+	
+	/* Remove fade effect when expanded */
 	.expanded::after {
 		content: none !important; /* Removes the pseudo-element when the description is fully visible */
 	}
@@ -269,7 +269,6 @@
 		text-align: left;
 	}
 
-
 	.folder_c_song_title{
 		font-weight: bold; 
 		font-size: 1.1em; 
@@ -305,12 +304,6 @@
 	.fav-heart.active {
 		color: #ff4d4d !important; /* Red when liked */
 	}
-
-/* 	Ensure the layout doesn't break */
-/* 	.info-title, .track-info {		*/
-/*		display: flex;				*/
-/*		align-items: center;		*/
-/*	}								*/	
 	
 	/* --- Filter Header Styles --- */
 	#filter-header {
@@ -325,7 +318,6 @@
 		font-size: 16px; /* Adjust size as needed to match the count text */
 	}
 
-	/* Style the Reset Button */
 	#reset-filter-btn {
 		padding: 5px 10px;
 		background-color: #007bff; /* Primary blue color */
@@ -375,8 +367,6 @@
 		font-size: 14px;
 	}
 
-}
- 
     /* End of Playback/List Styling */
     #playlist li:last-child { border-bottom: none; }
     .playing { font-weight: bold; color: #007bff; background-color: #e9f5ff; }
@@ -457,6 +447,68 @@
 
 	#btn-scroll-top:hover {
 		background-color: #0056b3;
+	}
+	
+	/* Container for the 3 filter rows */
+	#filter-grid-container {
+		display: flex;
+		flex-direction: column;
+		gap: 8px; /* Tight vertical spacing */
+	}
+
+	/* Each row: Label on left, Box on right */
+	.control-group {
+		display: grid;
+		/* Fixed width for label (110px fits 'Nhà Sáng Tạo'), rest for input */
+		grid-template-columns: 110px 1fr; 
+		align-items: center;
+		gap: 10px;
+	}
+
+	.control-group label {
+		font-weight: bold;
+		font-size: 0.9em;
+		color: #333;
+		white-space: nowrap;
+		text-align: right; /* Keeps labels neat against the boxes */
+	}
+
+	#filter-grid-container input, 
+	#filter-grid-container select {
+		padding: 4px 8px;       /* Reduced top/bottom padding */
+		border: 1px solid #aaa;
+		border-radius: 4px;
+		
+		/* THE HEIGHT FIXES  */
+		height: 34px;           /* Forces all boxes to this exact height */
+		box-sizing: border-box; /* Ensures padding doesn't push the height out */
+		
+		width: 100%;
+		font-size: 0.9em;
+		line-height: normal;    /* Prevents text from pushing the box open */
+	}
+	
+	/* Ensure the Reset button matches perfectly too */
+	#reset-filter-btn {
+		height: 34px;           /* Exact match to the white boxes */
+		padding: 0 15px;
+		display: flex;
+		align-items: center;    /* Keeps text centered vertically */
+		justify-content: center;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		font-size: 0.85em;
+		cursor: pointer;
+		font-weight: bold;
+	}
+
+	/* Mobile: Stack them so they don't get squished */
+	@media (max-width: 768px) {
+		#filter-grid-container {
+			grid-template-columns: 1fr;
+		}
 	}
 
     /* ========================================================================= */
@@ -565,7 +617,7 @@
            			font-size: 4px !important; /* Smaller text on mobile */
             		white-space: nowrap !important; 
 			    }
-        /* 🔵 Folder A Tracks  */
+        /* Folder A Tracks  */
         #playlist li:not(:has(.folder-b-info)) {
             flex-direction: column !important; 
             align-items: flex-start !important;
@@ -578,8 +630,7 @@
         .external-link {
             align-self: flex-end !important; 
             margin-top: 5px !important;
-        }
-		
+        }		
     }
 </style>
 </head>
@@ -591,7 +642,7 @@
         <button class="folder-button" data-prefix="70NamTinhCaVN/" id="btn-foldera">70 Năm Tình Ca Việt Nam</button>
         <button class="folder-button" data-prefix="AI/" id="btn-folderb">Nhạc AI Cover</button>
         <button class="folder-button" data-prefix="MyCollection/" id="btn-folderc" style="display: none;" onclick="loadFolderC()">Nhạc Sưu Tầm</button>
-		<button class="folder-button" id="btn-favorites" data-prefix="FAVORITES/">  <span style="color: #ff4d4d;">♥</span> Yêu Thích</button>
+		<button class="folder-button" data-prefix="FAVORITES/" id="btn-favorites" style="display: none;">  <span style="color: #ff4d4d;">♥</span> Yêu Thích</button>
     </div>
 
     <div id="folder-description">
@@ -604,23 +655,41 @@
         </div>
     </div>
 
-	<div id="filter-section" style="display:none; margin-bottom: 20px;">
-		<h3 >Tùy Chọn (<span id="track-count-display"  >0</span>  bài) 
-			<button id="reset-filter-btn" style="margin-left: 0;" >Reset</button>
-		</h3>		
-	
-		<div id="filter-controls" style="display: flex; gap: 20px; align-items: center;">
-			<div>
+	<div id="filter-section" style="display:none; margin-bottom: 20px; padding: 12px; background-color: #ccc; border-radius: 8px;">
+		
+		<div id="filter-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #bbb; padding-bottom: 8px;">
+			<div style="display: flex; align-items: center; gap: 15px;">
+				<h3 style="margin: 0; font-size: 1.05em;">Tùy Chọn (<span id="track-count-display">0</span> bài)</h3>
+				<button id="reset-filter-btn">Reset All</button>
+			</div>
+			
+			<select id="sort-select" style="padding: 4px; border-radius: 4px;">
+				<option value="title">Thứ tự: Theo Tên Bài</option>
+				<option value="composer">Theo Tên Tác Giả</option>
+				<option value="creator">Thứ tự: Theo Tên Nhà Sáng Tạo</option>
+			</select>
+		</div>
+
+		<div id="filter-grid-container">
+			<div class="control-group">
+				<label for="title-search">Tìm Tên Bài</label>
+				<input type="text" id="title-search" placeholder="Nhập tên bài...">
+			</div>
+			<div class="control-group">
 				<label for="composer-select">Tác Giả</label>
-				<select id="composer-select" style="flex-grow: 1;">
-					<option value="all">Tất Cả Các Tác Giả </option> </select>	</div>
-			<div>
-				<label for="creator-select">Người Trình Bày</label>
-				<select id="creator-select" style="flex-grow: 1">
-					<option value="all">Tất Cả Các Người Trình Bày </option> </select> </div>
+				<select id="composer-select">
+					<option value="all">Tất Cả Tác Giả</option>
+				</select>
+			</div>
+			<div class="control-group">
+				<label for="creator-select" id="creator-label">Nhà Sáng Tạo</label>
+				<select id="creator-select">
+					<option value="all">Tất Cả</option>
+				</select>
+			</div>
 		</div>
 	</div>
-
+		
 	<div id="fixed-player-wrapper">
 		<audio id="audio-player" controls></audio>
 		
@@ -861,13 +930,10 @@
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">AI ĐI NGOÀI SƯƠNG GIÓ</span>
 				<span class="info-cell cell-middle">Nguyễn Hữu Thiết</span>
-				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@emsoundscape/videos' target='_blank'>EmSoundscape</a> </span>	
-			</span>			
+				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@emsoundscape/videos' target='_blank'>EmSoundscape</a> </span>	</span>	
 			<button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=Lfzr_ZF9xg4" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/Lfzr_ZF9xg4/default.jpg" alt="YouTube Thumbnail"> 
-				<span class="yt-text">Xem Video</span> 
-			</button> 
-		</li>
+				<span class="yt-text">Xem Video</span> 	</button> 	</li>
 
 		<li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/AiDuaEmVe-NguyenAnh9-HieuThaoOffical.mp3">
 			<span class="track-info folder-b-info">
@@ -2082,7 +2148,7 @@
         <li data-src="https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/AI/MuaThuCali-LupngNguyenThao_tho_NguyenMCuong-SweetMelodyGS.mp3">
 			<span class="track-info folder-b-info">
 				<span class="info-cell cell-top">MÙA THU CALI</span>
-				<span class="info-cell cell-middle">Lương Nguyên Thảo, thơ Nguyễn M. Cường</span>
+				<span class="info-cell cell-middle">Lương Nguyên Thảo, thơ N.M.Cường</span>
 				<span class="info-cell cell-bottom"><a href='https://www.youtube.com/@sweetmelodygs/videos' target='_blank'>SweetMelodyGS</a> </span>	</span>			
             <button class="youtube-link" data-yt-url="https://www.youtube.com/watch?v=5Vrlei4C03g&t=903s" data-prefix="AI/">
 				<img src="https://img.youtube.com/vi/Q1dPlVc6Xvc/default.jpg" alt="YouTube Thumbnail"> 
@@ -3298,12 +3364,13 @@
 		}
 
 		let originalPlaylistHTML = ""; // This will hold Folders A and B	
-		// Check if the URL contains "?mode=dev"
+		
 		const urlParams = new URLSearchParams(window.location.search);
 		const isBetaTester = urlParams.get('mode') === 'dev';
 
-		if (isBetaTester) {
+		if (true) {/*(isBetaTester) {*/
 			document.getElementById('btn-folderc').style.display = 'inline-block';
+			document.getElementById('btn-favorites').style.display = 'inline-block';			
 			console.log("Welcome, Developer! Folder C is now active.");
 		}
 		
@@ -3327,28 +3394,33 @@
 		const resetButton = document.getElementById('reset-filter-btn');	
 		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'MyCollection/'];		
 		const FOLDER_C_API = "https://music-playlist-api-public.pham-h-hai.workers.dev/playlist";
-
+		const titleSearchInput = document.getElementById('title-search');
+		const sortSelect = document.getElementById('sort-select');
+		
+		// Set to true for "Starts With" search, false for "Contains" search.
+		let SEARCH_MODE_START_ONLY = false;
+		
         const folderDescriptions = {
             '70NamTinhCaVN/': {
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/HoaiNam.png?q=80&w=100&h=100&fit=contain&auto=format', 
-                description: "70 Năm Tình Ca Trong Tân Nhạc Việt Nam là một chương trình 'Tân nhạc dẫn giải' bằng audio, được phát thanh 95 kỳ trên đài SBS ở Úc châu.<br>Người biên soạn, phụ trách chương trình và cũng là người đọc là ông <a href='https://t-van.net/author/hoainam/' target='_blank'>Hoài Nam</a>, cộng tác viên của đài SBS.<br>Dù các bài phát thanh đã kết thúc từ rất lâu (2010), dư âm của nó vẫn còn vang vọng. Hôm nay, như một lời tri ân đến ông Hoài Lâm, tôi làm một việc mà nhiều người khác đã từng làm, là tiếp tục làm lan tỏa công trình giá trị này.<br><br>Trong khi đang thực hiện trang này, tôi tình cờ phát hiện có trang web <a href='https://t-van.net/nghe-70-nam-tnh-ca-trong-tn-nh%e1%ba%a1c-vi%e1%bb%87t-nam-c%e1%bb%a7a-hai-nam/' target='_blank'> <b> T.Vấn & Bạn Hữu </b> </a>, chẳng những đã đăng tải toàn bộ chương trình này từ lâu, mà còn có thêm nhiều hình ảnh, bài viết liên quan. Vậy xin mạn phép dẫn các đường link trực tiếp các bài phụ lục thú vị này tại các phần <b>'Đọc thêm ...'</b>phía dưới, và chân thành cám ơn ông T.Vấn <br><br>Sau cùng, xin lưu ý là bạn đọc có thể dễ dàng tải từng bài audio về bằng cách bấm vào nút ' &vellip; ', phía bên phải hình volume &#128266;  <br> Hoặc tải tất cả về một lần, trong một file rất lớn (1Gb) <a href='https://drive.google.com/file/d/1t2LRJqWESEJh1Bs8FouaxSsu7zWz3dbV/view?usp=sharing' target='_blank'>tại đây.</a> "  ,
+                description: "70 Năm Tình Ca Trong Tân Nhạc Việt Nam là một chương trình 'Tân nhạc dẫn giải' bằng audio, được phát thanh 95 kỳ trên đài SBS ở Úc châu.<br>Người biên soạn, phụ trách chương trình và cũng là người đọc là ông <a href='https://t-van.net/author/hoainam/' target='_blank'>Hoài Nam</a>, cộng tác viên của đài SBS.<br>Dù các bài phát thanh đã kết thúc từ rất lâu (2010), dư âm của nó vẫn còn vang vọng. Hôm nay, như một lời tri ân đến ông Hoài Lâm, chúng tôi làm một việc mà nhiều người khác đã từng làm, là tiếp tục làm lan tỏa công trình giá trị này.<br><br>Trong khi đang thực hiện trang này, chúng tôi tình cờ phát hiện có trang web <a href='https://t-van.net/nghe-70-nam-tnh-ca-trong-tn-nh%e1%ba%a1c-vi%e1%bb%87t-nam-c%e1%bb%a7a-hai-nam/' target='_blank'> <b> T.Vấn & Bạn Hữu </b> </a>, chẳng những đã đăng tải toàn bộ chương trình này từ lâu, mà còn có thêm nhiều hình ảnh, bài viết liên quan. Vậy xin mạn phép dẫn các đường link trực tiếp các bài phụ lục thú vị này tại các phần <b>'Đọc thêm ...'</b>phía dưới, và chân thành cám ơn trang T.Vấn & Bạn Hữu <br><br>Sau cùng, xin lưu ý là bạn đọc có thể dễ dàng tải từng bài audio về bằng cách bấm vào nút ' &vellip; ', phía bên phải hình volume &#128266;  <br> Hoặc tải tất cả về một lần, trong một file rất lớn (1Gb) <a href='https://drive.google.com/file/d/1t2LRJqWESEJh1Bs8FouaxSsu7zWz3dbV/view?usp=sharing' target='_blank'>tại đây.</a> "  ,
                 alt: "Hoài Nam",
                 link: '#',  //'https://t-van.net/nghe-70-nam-tnh-ca-trong-tn-nh%e1%ba%a1c-vi%e1%bb%87t-nam-c%e1%bb%a7a-hai-nam/', 
                 linkText: 'Đọc tiếp ...'
             },
             'AI/': {
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/disclaimer_round100x100.jpg?q=80&w=100&h=100&fit=contain&auto=format', 
-                description: 'Đây là trang web cá nhân không có mục đích thương mại, được làm ra, trước là để tôi có thể nghe nhạc mà không bị gián đoạn, mà không cần phải xem video, sau là để giới thiệu một món ăn tinh thần mới lạ, phong phú và đa dạng, đến đôi ba người thân quen.<br><br>Các bài hát dưới đây tôi chọn theo sở thích cá nhân, dựa trên phần âm thanh chứ không trên phần hình ảnh, và tránh các bài quá "ồn ào", hoặc đi quá xa so với nguyên tác.<br><br>Tôn trọng các tác giả đã sáng tạo ra videos,  mà tôi xin tạm mặc định là chủ các kênh youtube, nhạc trong phần này chỉ nghe chứ không thể tải xuống được. Ngoài ra tôi đã nêu rõ danh tính các tác giả, đường dẫn tới kênh của họ và đường dẫn tới từng video mà tôi đã trích xuất phần âm thanh.<br>Thính giả nào muốn xem phần video, hoặc muốn khám phá thêm, hoặc có bình luận gì về nội dung các bài hát thì xin vào các đường dẫn đã để sẵn.<br><br>Hy vọng các trích dẫn của tôi không làm ai phật lòng. Nếu có lầm lẫn gì, hay có phạm đến quyền lợi của vị nào thì <a href=mailto:“anjou.sur.le.lac@gmail.com">vui lòng cho biết</a> để tôi sửa đổi.<br>Thành thật cám ơn các tác giả sáng tác nhạc và các nhà sáng tạo nội dung.',  
+                description: 'Đây là trang web cá nhân không có mục đích thương mại, được làm ra, trước là để chúng tôi có thể nghe nhạc mà không bị gián đoạn, mà không cần phải xem video, sau là để giới thiệu một món ăn tinh thần mới lạ, phong phú và đa dạng, đến những người thân quen.<br><br>Các bài hát dưới đây chúng tôi chọn theo sở thích cá nhân, dựa trên phần âm thanh chứ không trên phần hình ảnh, và tránh các bài quá "ồn ào", hoặc đi quá xa so với nguyên tác.<br><br>Tôn trọng các tác giả đã sáng tạo ra videos,  mà chúng tôi xin tạm mặc định là chủ các kênh youtube, nhạc trong phần này chỉ nghe chứ không thể tải xuống được. Ngoài ra tôi đã nêu rõ danh tính các tác giả, đường dẫn tới kênh của họ và đường dẫn tới từng video mà tôi đã trích xuất phần âm thanh.<br>Thính giả nào muốn xem phần video, hoặc muốn khám phá thêm, hoặc có bình luận gì về nội dung các bài hát thì xin vào các đường dẫn đã để sẵn.<br><br>Hy vọng các trích dẫn của chúng tôi không làm ai phật lòng. Nếu có lầm lẫn gì, hay có phạm đến quyền lợi của vị nào thì <a href=mailto:“anjou.sur.le.lac@gmail.com">vui lòng cho biết</a> để chúng tôi kịp thời sửa đổi.<br>Thành thật cám ơn các tác giả sáng tác nhạc và các nhà sáng tạo nội dung.',  
                 alt: '', 
-                link: '#', // **MODIFIED:** Use a dummy link or remove it completely for a pure button
+                link: '',  
                 linkText: 'Đọc tiếp ...' 
             },
             'MyCollection/': { 
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/CodingWorkFromHomeGIFbyPersona.gif',
-                description: 'Nhạc sưu tầm ...', 
+                description: 'Đây là những bài nhạc được sưu tầm từ internet. Chúng tôi chỉ muốn mang âm nhạc đến cho nhiều người hơn, không làm thương mại. Nếu việc đăng tải ở đây có gì lầm lẫn hay phạm đến quyền lợi của cá nhân hay đơn vị nào, xin <a href=mailto:“anjou.sur.le.lac@gmail.com">vui lòng cho biết</a> để chúng tôi kịp thời sửa đổi. Cũng xin tỏ lòng biết ơn đến các ca, nhạc sĩ đã cống hiến cho đời những tác phẩm, mà cho đến nay vẫn còn trong ký ức của triệu triệu người Việt Nam khắp nơi.', 
                 alt: '', 
                 link: '',
-                linkText: ''
+                linkText: 'Đọc tiếp ...' 
             },
             'FAVORITES/': { 
                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/CodingWorkFromHomeGIFbyPersona.gif',
@@ -3364,18 +3436,46 @@
 		injectHeartsToStaticTracks();
 
 		function toggleScrollTopButton() {
-		// Determine the scroll threshold (e.g., 500 pixels down)
-		// window.scrollY is the current vertical scroll position
-		const scrollThreshold = 500; 
-
-		if (window.scrollY > scrollThreshold) {
-			// Show the button
-			scrollTopButton.style.display = 'block';
-		} else {
-			// Hide the button
-			scrollTopButton.style.display = 'none';
+			// Determine the scroll threshold (e.g., 500 pixels down)
+			// window.scrollY is the current vertical scroll position
+			const scrollThreshold = 500; 
+			if (window.scrollY > scrollThreshold) {
+				// Show the button
+				scrollTopButton.style.display = 'block';
+			} else {
+				// Hide the button
+				scrollTopButton.style.display = 'none';
+			}
 		}
-	}
+	
+		function sortPlaylist() {
+			const sortBy = sortSelect.value;
+			const items = Array.from(playlist.querySelectorAll('li'));
+			
+			items.sort((a, b) => {
+				const getInfo = (el) => {
+					const title = (el.querySelector('.cell-top') || el.querySelector('.folder_c_song_title') || el.querySelector('.track-info'))?.textContent || '';
+					const composer = (el.querySelector('.cell-middle') || el.querySelector('.folder_c_composer'))?.textContent || '';
+					const creator = (el.querySelector('.cell-bottom a') || el.querySelector('.folder_c_singer'))?.textContent || '';
+					
+					return { 
+						title: title.replace('♥', '').trim().toLowerCase(), 
+						composer: composer.trim().toLowerCase(), 
+						creator: creator.trim().toLowerCase() 
+					};
+				};
+				
+				const infoA = getInfo(a);
+				const infoB = getInfo(b);
+				
+				let valA = infoA[sortBy];
+				let valB = infoB[sortBy];
+				
+				return valA.localeCompare(valB, 'vi', { sensitivity: 'base' });
+			});
+			
+			items.forEach(li => playlist.appendChild(li));
+		}
 		
 		function setupExternalLinkListeners() {
 			// 1. Setup listeners for the YouTube Buttons (Folder B)
@@ -3414,130 +3514,93 @@
 		function populateFilterOptions() {
 			const composersMap = new Map();
 			const creatorsMap = new Map();
-
-			// 🔴 CHANGE: Use a live query instead of the stale 'tracks' variable
 			const liveTracks = playlist.querySelectorAll('li');
 
-			// 1. Calculate counts
-			liveTracks.forEach(track => {
-				const src = track.getAttribute('data-src');
-				
-				// Ensure src exists and belongs to Folder B
-				if (src && src.includes('AI/')) {					
-					const trackInfo = track.querySelector('.folder-b-info');
-					if (trackInfo) {
-						// Composer (cell-middle)
-						const composer = trackInfo.querySelector('.cell-middle').textContent.trim();
-						if (composer) {
-							composersMap.set(composer, (composersMap.get(composer) || 0) + 1);
-						}
+			const activeButton = document.querySelector('.folder-button.active');
+			const isFolderC = activeButton && activeButton.id === 'btn-folderc';
+			
+			
 
-						// Creator (cell-bottom a)
-						const creatorLink = trackInfo.querySelector('.cell-bottom a');
-						const creator = creatorLink ? creatorLink.textContent.trim() : '';
-						if (creator) {
-							creatorsMap.set(creator, (creatorsMap.get(creator) || 0) + 1);
-						}
-					}
-				}
+			// 🟢 FIX: Update the 3rd Sort Option text
+			const sortSelect = document.getElementById('sort-select');
+			if (sortSelect && sortSelect.options[2]) {
+				sortSelect.options[2].textContent = isFolderC ? "Theo Tên Ca Sĩ" : "Theo Tên Nhà Sáng Tạo";
+			}
+			// Update Label based on active folder (Point #3)
+			const creatorLabel = document.querySelector('label[for="creator-select"]');
+			const activeBtn = document.querySelector('.folder-button.active');
+			if (creatorLabel && activeBtn) {
+				creatorLabel.textContent = (activeBtn.id === 'btn-folderc') ? 'Ca Sĩ' : 'Nhà Sáng Tạo';
+			}
+
+			liveTracks.forEach(track => {
+				// Look for Folder B classes OR Folder C classes
+				const composer = (track.querySelector('.cell-middle') || track.querySelector('.folder_c_composer'))?.textContent.trim();
+				const creator = (track.querySelector('.cell-bottom a') || track.querySelector('.folder_c_singer'))?.textContent.trim();
+
+				if (composer) composersMap.set(composer, (composersMap.get(composer) || 0) + 1);
+				if (creator) creatorsMap.set(creator, (creatorsMap.get(creator) || 0) + 1);
 			});
 
-			// 2. Helper function to populate a select element (Logic remains exactly as yours)
-			((selectElement, dataMap, allLabelText) => {
-				while (selectElement.options.length > 0) {
-					selectElement.remove(0);
-				}
-				
-				const allOption = document.createElement('option');
-				allOption.value = 'all';
-				allOption.textContent = `${allLabelText} (${dataMap.size})`; 
-				selectElement.appendChild(allOption);
-				
-				Array.from(dataMap.keys()).sort().forEach(item => {
-					const count = dataMap.get(item); 
-					const option = document.createElement('option');
-					option.value = item; 
-					option.textContent = `${item} (${count})`;
-					selectElement.appendChild(option);
-				});
-			})(composerSelect, composersMap, 'Tất Cả Tác Giả');
-			
-			// Repeat for the Creator Select box
-			((selectElement, dataMap, allLabelText) => {
-				while (selectElement.options.length > 0) {
-					selectElement.remove(0);
-				}
-				
-				const allOption = document.createElement('option');
-				allOption.value = 'all';
-				allOption.textContent = `${allLabelText} (${dataMap.size})`; 
-				selectElement.appendChild(allOption);
-				
-				Array.from(dataMap.keys()).sort().forEach(item => {
-					const count = dataMap.get(item); 
-					const option = document.createElement('option');
-					option.value = item; 
-					option.textContent = `${item} (${count})`;
-					selectElement.appendChild(option);
-				});
-			})(creatorSelect, creatorsMap, 'Tất Cả Người Trình Bày');
+			// Reuse your existing helper logic to fill the <select> elements
+			fillSelect(composerSelect, composersMap, 'Tất Cả Tác Giả');
+			fillSelect(creatorSelect, creatorsMap, (activeBtn?.id === 'btn-folderc') ? 'Tất Cả Ca Sĩ' : 'Tất Cả Nhà Sáng Tạo');
 		}
-		
+
+		// Small helper to keep the code clean
+		function fillSelect(selectElement, dataMap, allLabelText) {
+			selectElement.innerHTML = '';
+			const allOption = document.createElement('option');
+			allOption.value = 'all';
+			allOption.textContent = `${allLabelText} (${dataMap.size})`; 
+			selectElement.appendChild(allOption);
+			
+			Array.from(dataMap.keys()).sort().forEach(item => {
+				const option = document.createElement('option');
+				option.value = item; 
+				option.textContent = `${item} (${dataMap.get(item)})`;
+				selectElement.appendChild(option);
+			});
+		}
+
 		function applyFilters() {
 			const selectedComposer = composerSelect.value;
 			const selectedCreator = creatorSelect.value;
+			const searchQuery = titleSearchInput.value.toLowerCase().trim();
 			let visibleTrackCount = 0; 
 
-			// 🔴 FIX: Instead of using the old 'tracks' variable, we get them LIVE
+			const activeBtn = document.querySelector('.folder-button.active');
+			const isFolderBActive = activeBtn && activeBtn.id === 'btn-folderb';
+			const isFolderCActive = activeBtn && activeBtn.id === 'btn-folderc';
+
 			const liveTracks = playlist.querySelectorAll('li');
 
 			liveTracks.forEach(track => {
-				const src = track.getAttribute('data-src');
-				
-				// Only apply filtering logic to tracks currently belonging to Folder B
-				if (!src || !src.includes('AI/')) {
-					return; 
-				}
+				const src = track.getAttribute('data-src') || "";
+				const isAiTrack = src.includes('AI/');
+				const isFolderCTrack = src.includes('FOLDER_C/'); // Or however you identify C tracks
 
-				const trackInfo = track.querySelector('.folder-b-info');
-				if (!trackInfo) return; 
-
-				const trackComposer = trackInfo.querySelector('.cell-middle').textContent.trim();
-				const trackCreatorLink = trackInfo.querySelector('.cell-bottom a');
-				const trackCreator = trackCreatorLink ? trackCreatorLink.textContent.trim() : '';
+				// 1. DATA EXTRACTION
+				const trackTitle = (track.querySelector('.cell-top') || track.querySelector('.folder_c_song_title'))?.textContent.replace('♥', '').trim().toLowerCase() || "";
+				const trackComposer = (track.querySelector('.cell-middle') || track.querySelector('.folder_c_composer'))?.textContent.trim() || "";
+				const trackCreator = (track.querySelector('.cell-bottom a') || track.querySelector('.folder_c_singer'))?.textContent.trim() || "";
 				
-				// Filtering logic (Note: using 'all' matches your dropdown values)
+				// 2. FILTER MATCHING
 				const composerMatch = (selectedComposer === 'all' || trackComposer === selectedComposer);
 				const creatorMatch = (selectedCreator === 'all' || trackCreator === selectedCreator);
-				
-				const isMatch = composerMatch && creatorMatch;
-				
-				track.classList.toggle('hidden-track', !isMatch);
-				
-				if (isMatch) {
-					visibleTrackCount++;
-				}
-			});
+				let titleMatch = !searchQuery || (SEARCH_MODE_START_ONLY ? trackTitle.startsWith(searchQuery) : trackTitle.includes(searchQuery));
 
-			// Handle Player Display for Folder B
-			const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
-			playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
-			
-			if (firstVisibleTrack) {
-				player.src = firstVisibleTrack.getAttribute('data-src');
-				player.pause(); 
-				firstVisibleTrack.classList.add('playing');
-				
-				// Logic to handle Title (supports both A/B and C structure)
-				const trackTitleElement = firstVisibleTrack.querySelector('.track-info') || firstVisibleTrack.querySelector('.info-title');
-				const trackTitle = trackTitleElement ? trackTitleElement.textContent.trim() : 'Unknown';
-				
-				currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
-			} else {
-				player.pause();
-				player.src = '';
-				currentTrackDisplay.textContent = 'Now Playing: No songs match the filter.';
-			}
+				let shouldShow = composerMatch && creatorMatch && titleMatch;
+
+				// 3. STRICT FOLDER LOGIC (The Fix)
+				if (isFolderBActive && !isAiTrack) {
+					// In Folder B, if it's not an AI track, HIDE IT ALWAYS
+					shouldShow = false;
+				}
+
+				track.classList.toggle('hidden-track', !shouldShow);
+				if (shouldShow) visibleTrackCount++;
+			});
 
 			trackCountDisplay.textContent = visibleTrackCount;
 		}
@@ -3615,24 +3678,24 @@
 			// Ensure all tracks are deselected
 			playlist.querySelectorAll('.playing').forEach(t => t.classList.remove('playing'));
 			
-			if (firstVisibleTrack) {
-				// Prepare the player without calling .click() or .play()
-				player.src = firstVisibleTrack.getAttribute('data-src');
-				player.pause(); // Ensure the player remains paused
-				firstVisibleTrack.classList.add('playing');
+			<!-- if (firstVisibleTrack) { -->
+				<!-- // Prepare the player without calling .click() or .play() -->
+				<!-- player.src = firstVisibleTrack.getAttribute('data-src'); -->
+				<!-- player.pause(); // Ensure the player remains paused -->
+				<!-- firstVisibleTrack.classList.add('playing'); -->
 				
-				// Update the display for the fixed player
-				const trackTitle = firstVisibleTrack.querySelector('.track-info').textContent.trim();
-				currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
-			} else {
-				// If no songs match (shouldn't happen here, but good practice)
-				player.pause();
-				player.src = '';
-				currentTrackDisplay.textContent = 'Now Playing: Select a track.';
-			}
+				<!-- // Update the display for the fixed player -->
+				<!-- const trackTitle = firstVisibleTrack.querySelector('.track-info').textContent.trim(); -->
+				<!-- currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle; -->
+			<!-- } else { -->
+				<!-- // If no songs match (shouldn't happen here, but good practice) -->
+				<!-- player.pause(); -->
+				<!-- player.src = ''; -->
+				<!-- currentTrackDisplay.textContent = 'Now Playing: Select a track.'; -->
+			<!-- } -->
+			currentTrackDisplay.textContent = setupNowPlayingTrack(firstVisibleTrack);
         }
 		
-		// ✅ NEW VERSION (Live)
 		function getVisibleTracks() {
 			// We query the playlist again to see the NEW Folder C items
 			const liveTracks = playlist.querySelectorAll('li');
@@ -3728,7 +3791,7 @@
 				trackTitle = trackInfo.textContent.replace('Đọc thêm ...', '').trim();
 			}
 
-			currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle;
+			currentTrackDisplay.textContent = 'Now Playing: ' + trackTitle.replace('♥', '');
 
 			// 4. Play the track
 			const source = clickedTrack.getAttribute('data-src');
@@ -3746,34 +3809,35 @@
 			}	
         }
 			
-		function resetFilters() {
-			// 1. Reset both select boxes to the 'all' value
-			composerSelect.value = 'all';
+		function resetFilters() {			
+			composerSelect.value = 'all'; 		// 1. Reset Dropdowns and Search
 			creatorSelect.value = 'all';
-			
-			// 2. Run the filtering logic to update the tracklist and the header count
-			applyFilters();
+			if (titleSearchInput) 
+				titleSearchInput.value = ''; 	// 2. Reset Sort to Title			
+			sortSelect.value = 'title';		
+			applyFilters();						// 3. Apply the visibility filters (shows all songs)			
+			sortPlaylist();						// 4. Force the physical re-sorting by Title
 		}
-
+		
 		// 2. Function to fetch and build Folder C
 		async function loadFolderC() {
 			const playlistUl = document.getElementById('playlist');
-			// Optional: Clear or show loading
 			playlistUl.innerHTML = "<li>Loading Playlist...</li>";
-
 			try {
 				const response = await fetch(FOLDER_C_API);
 				const tracks = await response.json();
-				cachedFolderCData = tracks; // 🟢 NEW: Save tracks to the cache
-
+				cachedFolderCData = tracks; // Save tracks to the cache				
+				player.pause();				// Stop previous audio when switching to Folder C
+				player.src = "";
+				currentTrackDisplay.textContent = "Select a song to play.";
+		
 				// Clear the current list
 				playlistUl.innerHTML = "";
 
 				tracks.forEach(track => {
 					const li = document.createElement('li');
 					li.className = 'folder-c-item';
-					li.setAttribute('data-src', track.url);
-					
+					li.setAttribute('data-src', track.url);					
 					// Check if this track is already a favorite
 					const isFavClass = favorites.includes(track.url) ? 'active' : '';
 					
@@ -3791,43 +3855,82 @@
 					li.addEventListener('click', handleTrackClick); 
 					playlistUl.appendChild(li);				
 				});
+			// Now that tracks are in the DOM, run the tools
+			populateFilterOptions(); 
+			applyFilters(); 
+			sortPlaylist(); // This forces the initial A-Z sort			
+			const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');	
+			currentTrackDisplay.textContent = setupNowPlayingTrack(firstVisibleTrack);
 			
 			} catch (error) {
 				console.error("Failed to load Folder C:", error);
 				playlistUl.innerHTML = "<li>Error loading playlist.</li>";
 			}
 		}
-
+		// Setup the player with a given li element of the track and a given title classname 
+        function setupNowPlayingTrack(track_li){
+			const track_title= '';
+			if (track_li) {				
+				player.src = track_li.getAttribute('data-src');
+				player.pause(); // Ensure the player remains paused
+				track_li.classList.add('playing');
+				//depend on folders, the title can be either in class '.track-info' (folder a,b, d) or class .folder_c_song_title(folder c,d)
+				const song_title_1 = track_li.querySelector('.track-info');
+				const song_title_2 = track_li.querySelector('.folder_c_song_title');
+				if (song_title_1)
+					return 'Now Playing: ' + song_title_1.textContent.trim().replace('♥', '');
+				else if (song_title_2)
+					return 'Now Playing: ' + song_title_2.textContent.trim().replace('♥', '');	
+				else{
+					return 'Now Playing: Select a track.';
+				}				
+			} else {
+				// If no songs match (shouldn't happen here, but good practice)
+				player.pause();
+				player.src = '';
+				return 'Now Playing: Select a track.';
+			}
+		}
 		// --- Event Listeners ---
-        
+		
+		// Trigger filtering as the user types
+		titleSearchInput.addEventListener('input', applyFilters);   
+        // Attach the click handler to the LI		
         tracks.forEach(track => {
-            // Attach the click handler to the LI
             track.addEventListener('click', handleTrackClick);
         });
-
+		//---------------------------------------------------------------------------------------------
+		// Logics for switching folder A(70NamTinhCaVN/), B(AI/), C (MyCollection/) and D (FAVORITES/)		
 		folderButtons.forEach(button => {
 			button.addEventListener('click', (event) => {
-				const prefix = event.currentTarget.getAttribute('data-prefix');
-				if (prefix === 'FAVORITES/') {
-					folderDesciptionBox.style.display= 'none';
-				} else {
-					folderDesciptionBox.style.display= 'block';
-				}
+			
+				// 🟢 CLEAR SEARCH AND FILTERS ON FOLDER SWITCH
+				if (titleSearchInput) titleSearchInput.value = '';
+				composerSelect.value = 'all';
+				creatorSelect.value = 'all';
+				sortSelect.value = 'title'; // Reset sort to default Title
+				
+				const prefix = event.currentTarget.getAttribute('data-prefix');				
+				//show/hide sections depending on active folder				
+				filterSection.style.display =  (prefix === '70NamTinhCaVN/' || prefix === 'FAVORITES/') ? 'none' : 'block';			
+				folderDesciptionBox.style.display = (prefix === 'FAVORITES/') ? 'none': ('block', updateDescription(prefix));	
+				//make the active folder visually stands out
+				folderButtons.forEach(btn => {
+					btn.classList.remove("active");
+				});			
+				button.classList.add("active");		
+																						
 				// 1. Restore A & B if we were in Folder C (or switching to Favorites)
 				if (prefix === 'FAVORITES/' || prefix === '70NamTinhCaVN/' || prefix === 'AI/') {
-					playlist.innerHTML = originalPlaylistHTML;
-					// 🔴 CRITICAL: Re-inject hearts and re-attach play listeners
+					playlist.innerHTML = originalPlaylistHTML;	
 					injectHeartsToStaticTracks(); 
 					document.querySelectorAll('#playlist li').forEach(li => {
 						li.addEventListener('click', handleTrackClick);
 					});
 					setupExternalLinkListeners();
 				}
-
 				// 2. Handle Favorites Filtering
 				if (prefix === 'FAVORITES/') {
-					filterSection.style.display = 'none';				
-
 					// 🟢 Add favorited tracks from Folder C back into the list
 					cachedFolderCData.forEach(track => {
 						if (favorites.includes(track.url)) {
@@ -3857,18 +3960,28 @@
 						track.classList.toggle('hidden-track', !isFav); 
 					});
 					updateDescription(prefix);
+					
+					const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
+					currentTrackDisplay.textContent = setupNowPlayingTrack(firstVisibleTrack);
 				}
-				else 	{		
-					// 3. Normal Folder Logic
+				else if(prefix === 'MyCollection/' )  {
+					folderDesciptionBox.style.display = 'block';
+					loadFolderC();
+
+					populateFilterOptions(); 
+					applyFilters(); 
+					sortPlaylist();
+				}
+				else 	{	// 3. Normal Folder Logic for '70NamTinhCaVN/' and 'AI/'
+					
 					updateDescription(prefix);
 					filterPlaylist(prefix); 
 					
-					if (prefix === 'AI/') {
-						filterSection.style.display = 'block';
+					if (prefix === 'AI/') { //4. For 'AI/' folder
+						folderDesciptionBox.style.display = 'block';
 						populateFilterOptions(); 
 						applyFilters(); 
-					} else {
-						filterSection.style.display = 'none';
+						sortPlaylist(); 
 					}
 				}
 			});
@@ -3900,7 +4013,10 @@
 		
 		// Listener for the new Reset Button
 		resetButton.addEventListener('click', resetFilters);
-		
+	
+	    titleSearchInput.addEventListener('input', applyFilters);
+		sortSelect.addEventListener('change', sortPlaylist);		
+	
 		// --- Playback Control Listeners ---
 		document.getElementById('btn-next-track').addEventListener('click', playNextTrack);
 		document.getElementById('btn-previous-track').addEventListener('click', playPreviousTrack);	
@@ -3911,6 +4027,5 @@
 		populateFilterOptions();	
 
 	</script>
-
 </body>
 </html>
