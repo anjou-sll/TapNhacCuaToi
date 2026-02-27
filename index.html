@@ -263,7 +263,7 @@
 	/* Line 1: Full width title */
 	.info-title {
 		font-weight: bold;
-		font-size: 1.1em;
+		font-size: 1.0em;
 		color: #333; 
 		margin-bottom: 5px;
 		text-align: left;
@@ -271,7 +271,7 @@
 
 	.folder_c_song_title{
 		font-weight: bold; 
-		font-size: 1.1em; 
+		font-size: 1.0em; 
 		color: #284C9E;  
 		text-align: left; 
 		width:100%; 
@@ -286,7 +286,9 @@
 	}
 	.folder_c_composer{
 		display:block;
+		font-size: 1.0em; 
 		font-family: 'Lucida Handwriting','Segoe Script', cursive;
+		color: #1760b3;
 	}
 	.folder_c_singer{
 		display:block;
@@ -705,7 +707,7 @@
 						<span style="font-weight: bold;">Play All</span>
 					</label>
 					<label>
-						<input type="checkbox" id="shuffle-switch"> 
+						<input type="checkbox" id="shuffle-switch" checked> 
 						<span style="font-weight: bold;">Shuffle</span>
 					</label>
 				</div>
@@ -4995,6 +4997,8 @@
 						li.addEventListener('click', handleTrackClick);
 					});
 					setupExternalLinkListeners();
+
+					shuffleSwitch.checked = (prefix == '70NamTinhCaVN/')? false : true ;
 				}
 				// 2. Handle Favorites Filtering
 				if (prefix === 'FAVORITES/') {
