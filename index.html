@@ -4979,7 +4979,9 @@
 				creatorSelect.value = 'all';
 				sortSelect.value = 'title'; // Reset sort to default Title
 				
-				const prefix = event.currentTarget.getAttribute('data-prefix');				
+				const prefix = event.currentTarget.getAttribute('data-prefix');	
+				//default setting for Suffle options 
+				shuffleSwitch.checked = (prefix == '70NamTinhCaVN/')? false : true ;				
 				//show/hide sections depending on active folder				
 				filterSection.style.display =  (prefix === '70NamTinhCaVN/' || prefix === 'FAVORITES/') ? 'none' : 'block';			
 				folderDesciptionBox.style.display = (prefix === 'FAVORITES/') ? 'none': ('block', updateDescription(prefix));	
@@ -4997,8 +4999,6 @@
 						li.addEventListener('click', handleTrackClick);
 					});
 					setupExternalLinkListeners();
-
-					shuffleSwitch.checked = (prefix == '70NamTinhCaVN/')? false : true ;
 				}
 				// 2. Handle Favorites Filtering
 				if (prefix === 'FAVORITES/') {
