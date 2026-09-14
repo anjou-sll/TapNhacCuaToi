@@ -8256,10 +8256,10 @@
 		
 		const urlParams = new URLSearchParams(window.location.search);
 		const isBetaTester = urlParams.get('mode') === 'dev';
-
-		if (true) {/*(isBetaTester) {*/
-			document.getElementById('btn-folderc').style.display = 'inline-block';
-			document.getElementById('btn-favorites').style.display = 'inline-block';		
+		
+		document.getElementById('btn-favorites').style.display = 'inline-block';	
+		if (isBetaTester) {/*(true) {*/
+			document.getElementById('btn-folderc').style.display = 'inline-block';	
 			console.log("Welcome, Developer! Folder C is now active."); 
 		}
 		
