@@ -643,7 +643,7 @@
     <div id="folder-controls">
         <button class="folder-button" data-prefix="70NamTinhCaVN/" id="btn-foldera">70 Năm Tình Ca Việt Nam</button>
         <button class="folder-button" data-prefix="AI/" id="btn-folderb">Nhạc AI Cover</button>
-        <button class="folder-button" data-prefix="MyCollection/" id="btn-folderc" style="display: none;" onclick="loadFolderC()">Nhạc Sưu Tầm</button>
+        <button class="folder-button" data-prefix="DynamicAI/" id="btn_dynamicAI" style="display: none;" onclick="loadFolderDynamicAI()">DynamicAI</button>
 		<button class="folder-button" data-prefix="FAVORITES/" id="btn-favorites" style="display: none;">  <span style="color: #ff4d4d;">♥</span> Yêu Thích</button>
     </div>
 
@@ -9515,12 +9515,20 @@
 		let originalPlaylistHTML = ""; // This will hold Folders A and B	
 		
 		const urlParams = new URLSearchParams(window.location.search);
-		const isBetaTester = urlParams.get('mode') === 'dev';
+		const IsDevMode = urlParams.get('mode') === 'dev';
+		const button70Nam = document.getElementById('btn-foldera');
+		const buttonAI    = document.getElementById('btn_dynamicAI');
+		const buttonFav   = document.getElementById('btn-favorites');	
 		
 		document.getElementById('btn-favorites').style.display = 'inline-block';	
-		if (isBetaTester) {/*(true) {*/
-			document.getElementById('btn-folderc').style.display = 'inline-block';	
+		if (IsDevMode) {/*(true) {*/
+			buttonAI.style.display = 'inline-block';	
+			document.getElementById('btn-folderb').style.display = 'none';		
 			console.log("Welcome, Developer! Folder C is now active."); 
+		}
+		else{
+			buttonAI.style.display = 'none';	
+			document.getElementById('btn-folderb').style.display = 'inline-block';				
 		}
 		
         const player = document.getElementById('audio-player');
@@ -9541,10 +9549,12 @@
 		const creatorSelect = document.getElementById('creator-select');	
 		const trackCountDisplay = document.getElementById('track-count-display');		
 		const resetButton = document.getElementById('reset-filter-btn');	
-		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'MyCollection/', 'FAVORITES/'];		
+		const DOWNLOAD_RESTRICTED_PREFIXES = ['AI/', 'DynamicAI/', 'FAVORITES/'];		
 		const FOLDER_C_API = "https://music-playlist-api-public.pham-h-hai.workers.dev/playlist";
+		const FOLDER_DYNAMIC_AI_API = "https://music-playlist-api-public.pham-h-hai.workers.dev/playlist";
 		const titleSearchInput = document.getElementById('title-search');
 		const sortSelect = document.getElementById('sort-select');
+		
 		
 		// Set to true for "Starts With" search, false for "Contains" search.
 		let SEARCH_MODE_START_ONLY = false;
@@ -9564,11 +9574,11 @@
                 link: '',  
                 linkText: 'Đọc tiếp ...' 
             },
-            'MyCollection/': { 
-                image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/CodingWorkFromHomeGIFbyPersona.gif',
-                description: 'Đây là những bài nhạc được sưu tầm từ internet. Chúng tôi đăng lên vì muốn mang âm nhạc đến cho nhiều người hơn, không hề có mục đích thương mại.<br>Xin lưu ý đến quí thính giả là ở đây đa số là nhạc cũ thu âm đã lâu, chất lượng và âm lượng có khi không đồng đều và nhất là phần hòa âm phối khí đơn giản, không thể bằng như ngày nay. Nêú có gặp bài không hay thì xin thông cảm, nhẹ nhàng lướt qua.<br>Kho nostagic music của chúng tôi còn rất nhiều, sẽ được gạn lọc và tải dần lên khi thời gian cho phép.<br>Nếu việc đăng tải ở đây có lầm lẫn gì hay có phạm đến quyền lợi của cá nhân, đơn vị nào, xin <a href=mailto:“anjou.sur.le.lac@gmail.com">vui lòng cho biết</a> để chúng tôi kịp thời sửa đổi.<br> Nhân đây, chúng tôi xin tỏ lòng biết ơn đến các ca, nhạc sĩ đã cống hiến cho đời những tác phẩm mà sau bao năm vẫn còn nguyên trong ký ức của hàng triệu người Việt khắp nơi.', 
+            'DynamicAI/': { 
+                 image: 'https://pub-5df525ad22ec4484841c590303f6ebbd.r2.dev/images/disclaimer_round100x100.jpg?q=80&w=100&h=100&fit=contain&auto=format', 
+                description: 'Đây là trang web cá nhân không có mục đích thương mại, được làm ra, trước là để chúng tôi có thể nghe nhạc mà không bị gián đoạn, mà không cần phải xem video, sau là để giới thiệu một món ăn tinh thần mới lạ, phong phú và đa dạng, đến những người thân quen.<br><br>Các bài hát dưới đây chúng tôi chọn theo sở thích cá nhân, dựa trên phần âm thanh chứ không trên phần hình ảnh, và tránh các bài quá "ồn ào", hoặc đi quá xa so với nguyên tác. Đây là những lựa chọn rất chủ quan. Do đó, thính giả có thể loại những bài mình không muốn, bằng cách lựa (thả tim) các bài mình yêu thích, sau đó vào trang "Yêu Thích" để thưởng thức playlist của riêng mình.<br><br>Tôn trọng các tác giả đã sáng tạo ra videos,  mà chúng tôi xin tạm mặc định là chủ các kênh youtube, nhạc trong phần này chỉ nghe chứ không thể tải xuống được. Ngoài ra tôi đã nêu rõ danh tính các tác giả, đường dẫn tới kênh của họ và đường dẫn tới từng video mà tôi đã trích xuất phần âm thanh.<br>Thính giả nào muốn xem phần video, hoặc muốn khám phá thêm, hoặc có bình luận gì về nội dung các bài hát thì xin vào các đường dẫn đã để sẵn.<br><br>Hy vọng các trích dẫn của chúng tôi không làm ai phật lòng. Nếu có lầm lẫn gì, hay có phạm đến quyền lợi của vị nào thì <a href=mailto:“anjou.sur.le.lac@gmail.com">vui lòng cho biết</a> để chúng tôi kịp thời sửa đổi.<br>Thành thật cám ơn các tác giả sáng tác nhạc và các nhà sáng tạo nội dung.',  
                 alt: '', 
-                link: '',
+                link: '',  
                 linkText: 'Đọc tiếp ...' 
             },
             'FAVORITES/': { 
@@ -9631,7 +9641,8 @@
 			const ytButtons = document.querySelectorAll('.youtube-link');
 			ytButtons.forEach(button => {
 				// Ensure the button is only clickable if it belongs to the currently selected folder
-				if (button.getAttribute('data-prefix') === 'AI/') {
+				const dataPrefix = button.getAttribute('data-prefix')
+				if (dataPrefix === 'AI/' || dataPrefix === 'DynamicAI/') {
 					button.addEventListener('click', (event) => {
 						// STOP PROPAGATION: Prevents the click from reaching the parent <li> and starting the MP3
 						event.stopPropagation(); 
@@ -9666,21 +9677,21 @@
 			const liveTracks = playlist.querySelectorAll('li');
 
 			const activeButton = document.querySelector('.folder-button.active');
-			const isFolderC = activeButton && activeButton.id === 'btn-folderc';
+			const isFoderDynamicAI = activeButton && activeButton.id === 'btn_dynamicAI';
 			
 			
 
 			// 🟢 FIX: Update the 3rd Sort Option text
 			const sortSelect = document.getElementById('sort-select');
-			if (sortSelect && sortSelect.options[2]) {
-				sortSelect.options[2].textContent = isFolderC ? "Theo Tên Ca Sĩ" : "Theo Tên Nhà Sáng Tạo";
-			}
+			<!-- if (sortSelect && sortSelect.options[2]) { -->
+				<!-- sortSelect.options[2].textContent = isFoderDynamicAI ? "Theo Tên Ca Sĩ" : "Theo Tên Nhà Sáng Tạo"; -->
+			<!-- } -->
 			// Update Label based on active folder (Point #3)
 			const creatorLabel = document.querySelector('label[for="creator-select"]');
 			const activeBtn = document.querySelector('.folder-button.active');
-			if (creatorLabel && activeBtn) {
-				creatorLabel.textContent = (activeBtn.id === 'btn-folderc') ? 'Ca Sĩ' : 'Nhà Sáng Tạo';
-			}
+			<!-- if (creatorLabel && activeBtn) { -->
+				<!-- creatorLabel.textContent = (activeBtn.id === 'btn_dynamicAI') ? 'Ca Sĩ' : 'Nhà Sáng Tạo'; -->
+			<!-- } -->
 
 			liveTracks.forEach(track => {
 				// Look for Folder B classes OR Folder C classes
@@ -9693,7 +9704,7 @@
 
 			// Reuse your existing helper logic to fill the <select> elements
 			fillSelect(composerSelect, composersMap, 'Tất Cả Tác Giả');
-			fillSelect(creatorSelect, creatorsMap, (activeBtn?.id === 'btn-folderc') ? 'Tất Cả Ca Sĩ' : 'Tất Cả Nhà Sáng Tạo');
+			fillSelect(creatorSelect, creatorsMap,  'Tất Cả Nhà Sáng Tạo');
 		}
 
 		// Small helper to keep the code clean
@@ -9720,14 +9731,14 @@
 
 			const activeBtn = document.querySelector('.folder-button.active');
 			const isFolderBActive = activeBtn && activeBtn.id === 'btn-folderb';
-			const isFolderCActive = activeBtn && activeBtn.id === 'btn-folderc';
+			const isFoderDynamicAIActive = activeBtn && activeBtn.id === 'btn_dynamicAI';
 
 			const liveTracks = playlist.querySelectorAll('li');
 
 			liveTracks.forEach(track => {
 				const src = track.getAttribute('data-src') || "";
 				const isAiTrack = src.includes('AI/');
-				const isFolderCTrack = src.includes('FOLDER_C/'); // Or however you identify C tracks
+				<!-- const isFoderDynamicAITrack = src.includes('FOLDER_C/'); // Or however you identify C tracks -->
 
 				// 1. DATA EXTRACTION
 				const trackTitle = (track.querySelector('.cell-top') || track.querySelector('.folder_c_song_title'))?.textContent.replace('♥', '').trim().toLowerCase() || "";
@@ -9936,14 +9947,12 @@
 			ApplyDownloadRestrictions(isRestricted);		
         }
 		
-		function ApplyDownloadRestrictions(isRestricted){		
-			if (isRestricted) {
-				// If the file belongs to Folder B ,C, or D, disable the download option
-				player.setAttribute('controlsList', 'nodownload');
+		function ApplyDownloadRestrictions(isRestricted){
+			if (IsDevMode || ! isRestricted) {
+				player.removeAttribute('controlsList');				
 			} else {
-				// For all other folders/files (e.g., Folder A, Show All), enable the download option
-				player.removeAttribute('controlsList');
-			}	
+				player.setAttribute('controlsList', 'nodownload');
+			}			
 		}
 			
 		function resetFilters() {			
@@ -9955,43 +9964,59 @@
 			applyFilters();						// 3. Apply the visibility filters (shows all songs)			
 			sortPlaylist();						// 4. Force the physical re-sorting by Title
 		}
-		
-		// 2. Function to fetch and build Folder C
-		async function loadFolderC() {
+				
+		async function loadFolderDynamicAI() {
 			const playlistUl = document.getElementById('playlist');
 			playlistUl.innerHTML = "<li>Loading Playlist...</li>";
 			try {
-				const response = await fetch(FOLDER_C_API);
+				const response = await fetch(FOLDER_DYNAMIC_AI_API);
 				const tracks = await response.json();
 				cachedFolderCData = tracks; // Save tracks to the cache				
 				player.pause();				// Stop previous audio when switching to Folder C
 				player.src = "";
 				currentTrackDisplay.textContent = "Select a song to play.";
-		
+						
 				// Clear the current list
 				playlistUl.innerHTML = "";
 
 				tracks.forEach(track => {
-					const li = document.createElement('li');
-					li.className = 'folder-c-item';
-					li.setAttribute('data-src', track.url);					
 					// Check if this track is already a favorite
 					const isFavClass = favorites.includes(track.url) ? 'active' : '';
 					
-					li.innerHTML = `					
-						<div class="folder_c_song_title"> 
-							<span class="fav-heart ${isFavClass}" onclick="toggleFavorite(event, '${track.url}')">♥</span>
-							${track.title}
-						</div>
-						<div class="folder_c_meta_info">
-							<span class="folder_c_composer">${track.composer}</span>  
-							<span class="folder_c_singer">${track.singer}</span>
-						</div>
+				    const yt_start_time = track.start_time == "0s" ?  "" : "?t=" + track.start_time;										
+					const yt_video_url = "https://www.youtube.com/watch?v=" + track.videoId + yt_start_time;
+					const yt_thumbnail = "https://img.youtube.com/vi/" + track.videoId + "/default.jpg";
+					const yt_creator_videos = "https://www.youtube.com/" + track.creatorId + "/videos";	
+					const li = document.createElement('li');
+					li.className = 'folder-c-item';
+					li.setAttribute('data-src', track.url);					
+										
+					li.innerHTML = `
+						<span class="track-info folder-b-info">
+							<span class="info-cell cell-top">							
+								<span class="fav-heart ${isFavClass}" onclick="toggleFavorite(event, '${track.url}')">♥</span>
+							    ${track.title}							
+							</span>
+							<span class="info-cell cell-middle">${track.composer}</span>
+							<span class="info-cell cell-bottom">
+								<a href="${yt_creator_videos}" target="_blank">${track.creator}</a>
+							</span>
+						</span>
+					    <button class="youtube-link"
+							    data-yt-url="${yt_video_url}"
+							    data-prefix="DynamicAI/">
+							<img src="${yt_thumbnail}" alt="YouTube Thumbnail">
+							<span class="yt-text">Xem Video</span>
+						</button>						
 					`;
+	
 					// Re-attach your existing click/play logic
 					li.addEventListener('click', handleTrackClick); 
-					playlistUl.appendChild(li);				
+					playlistUl.appendChild(li);	
 				});
+				
+			setupExternalLinkListeners();
+			
 			// Now that tracks are in the DOM, run the tools
 			populateFilterOptions(); 
 			applyFilters(); 
@@ -10004,6 +10029,7 @@
 				playlistUl.innerHTML = "<li>Error loading playlist.</li>";
 			}
 		}
+		
 		// Setup the player with a given li element of the track
         function setupNowPlayingTrack(track_li){
 			const track_title= '';
@@ -10036,8 +10062,11 @@
         tracks.forEach(track => {
             track.addEventListener('click', handleTrackClick);
         });
+		
+		
+		
 		//---------------------------------------------------------------------------------------------
-		// Logics for switching folder A(70NamTinhCaVN/), B(AI/), C (MyCollection/) and D (FAVORITES/)		
+		// Logics for switching folder A(70NamTinhCaVN/), B(AI/), C (DynamicAI/) and D (FAVORITES/)		
 		folderButtons.forEach(button => {
 			button.addEventListener('click', (event) => {
 			
@@ -10060,7 +10089,7 @@
 				button.classList.add("active");		
 																										
 				// 1. Restore A & B if we were in Folder C (or switching to Favorites)
-				if (prefix === 'FAVORITES/' || prefix === '70NamTinhCaVN/' || prefix === 'AI/') {
+				if (prefix === 'FAVORITES/' || prefix === '70NamTinhCaVN/' || prefix === 'AI/' ) {
 					playlist.innerHTML = originalPlaylistHTML;	
 					injectHeartsToStaticTracks(); 
 					document.querySelectorAll('#playlist li').forEach(li => {
@@ -10068,24 +10097,37 @@
 					});
 					setupExternalLinkListeners();
 				}
+
 				// 2. Handle Favorites Filtering
 				if (prefix === 'FAVORITES/') {
 					// 🟢 Add favorited tracks from Folder C back into the list
 					cachedFolderCData.forEach(track => {
-						if (favorites.includes(track.url)) {
+						const yt_video_url = "https://www.youtube.com/watch?v=" + track.videoId ;
+						if (favorites.includes(yt_video_url)) {
+							const yt_thumbnail = "https://img.youtube.com/vi/" + track.videoId + "/default.jpg";
+							const yt_creator_videos = "https://www.youtube.com/" + track.creatorId + "/videos";		
 							const li = document.createElement('li');
-							li.className = 'folder-c-item';
+							li.className = 'folder-c-item'; 
 							li.setAttribute('data-src', track.url);
-							li.innerHTML = `					
-								<div class="folder_c_song_title"> 
-									<span class="fav-heart active" onclick="toggleFavorite(event, '${track.url}')">♥</span>
-									${track.title}
-								</div>
-								<div class="folder_c_meta_info">
-									<span class="folder_c_composer">${track.composer}</span>  
-									<span class="folder_c_singer">${track.singer}</span>
-								</div>
+							li.innerHTML = `
+								<span class="track-info folder-b-info">
+									<span class="info-cell cell-top">							
+										<span class="fav-heart ${isFavClass}" onclick="toggleFavorite(event, '${yt_video_url}')">♥</span>
+										${track.title}							
+									</span>
+									<span class="info-cell cell-middle">${track.composer}</span>
+									<span class="info-cell cell-bottom">
+										<a href="${yt_creator_videos}" target="_blank">${track.creator}</a>
+									</span>
+								</span>
+								<button class="youtube-link"
+										data-yt-url="${yt_video_url}"
+										data-prefix="DynamicAI/">
+									<img src="${yt_thumbnail}" alt="YouTube Thumbnail">
+									<span class="yt-text">Xem Video</span>
+								</button>						
 							`;
+
 							li.addEventListener('click', handleTrackClick);
 							playlist.appendChild(li);
 						}
@@ -10103,14 +10145,16 @@
 					const firstVisibleTrack = playlist.querySelector('li:not(.hidden-track)');
 					currentTrackDisplay.textContent = setupNowPlayingTrack(firstVisibleTrack);
 				}
-				else if(prefix === 'MyCollection/' )  {
+				else if(prefix === 'DynamicAI/' )  {
 					folderDesciptionBox.style.display = 'block';
-					loadFolderC();
+					loadFolderDynamicAI();
+					<!-- console.log("inject func called in DynamicAI");  -->
 
 					populateFilterOptions(); 
 					applyFilters(); 
 					sortPlaylist();
 				}
+
 				else 	{	// 3. Normal Folder Logic for '70NamTinhCaVN/' and 'AI/'
 					
 					updateDescription(prefix);
@@ -10164,8 +10208,11 @@
 		document.getElementById('btn-previous-track').addEventListener('click', playPreviousTrack);	
 
 		setupExternalLinkListeners();
-		document.getElementById('btn-foldera').click();
-		
+		if (IsDevMode)
+			buttonAI.click();
+		else 
+			button70Nam.click();
+
 		populateFilterOptions();	
 
 	</script>
